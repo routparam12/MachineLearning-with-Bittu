@@ -1,15 +1,15 @@
 ---
-import './styles/transformer.css';
+import './styles/pytorch.css';
 import TopBar from './components/TopBar.astro';
+import Torchy from './components/Torchy.astro';
 import AppSwitch from '../../shared/components/AppSwitch.astro';
-import Seedy from './components/Seedy.astro';
 import { DICTS, LANGS, swapLang, type Lang } from './i18n';
 import { SECTION_BY_ID } from '../index.js';
 
 interface Props { lang: Lang; title?: string; desc?: string }
 const { lang, title, desc } = Astro.props;
 const d = DICTS[lang];
-const accent = SECTION_BY_ID.transformer.accent;
+const accent = SECTION_BY_ID.pytorch.accent;
 ---
 <!doctype html>
 <html lang={d.htmlLang} data-theme="dark">
@@ -34,11 +34,11 @@ const accent = SECTION_BY_ID.transformer.accent;
     })();
   </script>
 </head>
-<body data-section="transformer" style={`--section-accent:${accent}`}>
-  <AppSwitch section="transformer" locale={lang} />
+<body data-section="pytorch" style={`--section-accent:${accent}`}>
+  <AppSwitch section="pytorch" locale={lang} />
   <TopBar lang={lang} />
   <slot />
-  <Seedy name={d.ui.seedyName} tips={d.seedyTips} />
+  <Torchy name={d.pet.name} greeting={d.pet.greeting} tips={d.pet.tips} />
   <script>
     import { initChrome } from './scripts/chrome.js';
     initChrome();

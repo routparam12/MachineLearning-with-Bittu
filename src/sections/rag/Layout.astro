@@ -1,6 +1,7 @@
 ---
 import './styles/rag.css';
 import AppSwitch from '../../shared/components/AppSwitch.astro';
+import Toolbar from './components/Toolbar.astro';
 import Torty from './components/Torty.astro';
 import { getDict } from './i18n/index.js';
 import { SECTION_BY_ID } from '../index.js';
@@ -29,6 +30,7 @@ const accent = SECTION_BY_ID.rag.accent;
   </head>
   <body data-section="rag" style={`--section-accent:${accent}`}>
     <AppSwitch section="rag" locale={locale} />
+    <Toolbar locale={locale} />
 
     <main>
       <slot />

@@ -7,10 +7,12 @@
    - accent  the section's colour, exposed to CSS as --section-accent
 */
 export const SECTIONS = [
-  { id: 'ml',  slug: '',                 label: 'ML with Bittu',       icon: '🧠', accent: '#6ee787' },
   { id: 'dsa', slug: 'searching-sorting', label: 'Searching & Sorting', icon: '🔀', accent: '#9d7bff' },
+  { id: 'oop', slug: 'oop',               label: 'OOP in Python',      icon: '🧩', accent: '#4b95e0' },
+  { id: 'ml',  slug: '',                 label: 'ML with Bittu',       icon: '🎰', accent: '#6ee787' },
   { id: 'rag', slug: 'rag',               label: 'RAG, stage by stage', icon: '🔎', accent: '#63c7cd' },
   { id: 'transformer', slug: 'transformer', label: 'Transformer',       icon: '🧠', accent: '#ff9e64' },
+  { id: 'pytorch', slug: 'pytorch',       label: 'PyTorch',            icon: '🔥', accent: '#ee4c2c' },
 ];
 
 export const SECTION_BY_ID = Object.fromEntries(SECTIONS.map((s) => [s.id, s]));

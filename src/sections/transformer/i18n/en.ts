@@ -63,7 +63,7 @@ export const en = {
     exploreReference: 'Explore the architecture reference',
     transformerBlocks: 'TRANSFORMER BLOCKS',
     transformerBlocksHint: 'causal self-attention + feed-forward',
-    transyName: 'Transy — tap me to explain this step',
+    seedyName: 'Seedy — tap me to explain this step',
     codeTitle: 'What the code is doing',
     streamTitle: 'The residual stream',
     streamHint: 'one row per token · one column per dimension',
@@ -253,13 +253,13 @@ export const en = {
       `That is the whole machine: ${n} word${Number(n) === 1 ? '' : 's'} written, each one a full pass through ${l} block${Number(l) > 1 ? 's' : ''}. Real models do the identical thing, just much wider and far more often.`,
   },
 
-  transyTips: [
-    'I am Transy, your tiny transformer terminal. Tap me while stepping through the model and I will explain the current operation.',
+  seedyTips: [
+    'I am Seedy, your tiny transformer terminal. Tap me while stepping through the model and I will explain the current operation.',
     'The tokens never change inside the network. Their hidden-state vectors do.',
     'Causal attention only allows a token to read itself and earlier tokens — never the future.',
   ],
 
-  transyExamples: {
+  seedyExamples: {
     default: 'x = transformer(x)',
     tokenize: 'ids = tokenizer("the weather is")',
     embed: 'x = tokenEmbedding[ids]',

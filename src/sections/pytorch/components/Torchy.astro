@@ -1,0 +1,173 @@
+---
+/* Torchy — the PyTorch section's pet. PyTorch's own mark is a flame, so
+   Torchy is shaped like one instead of another robot: a teardrop flame body,
+   simple expressive eyes, a flickering tip. Same rig as Bittu/Seedy/Classy —
+   eyes that track the cursor, a blink loop, moods that swap its face, and
+   proactive explaining: opening a card fires torchy:context, and Torchy
+   speaks it immediately, unprompted, the same way the other pets do. */
+interface Props { name: string; greeting: string; tips: string[] }
+const { name, greeting, tips } = Astro.props;
+---
+<div class="torchy-dock" data-torchy data-mood="idle" aria-live="polite">
+  <div class="torchy-bubble" data-torchy-bubble hidden></div>
+
+  <button class="torchy" data-torchy-poke type="button" aria-label={name} title={name}>
+    <svg viewBox="0 0 120 148" role="img" aria-hidden="true">
+      <defs>
+        <linearGradient id="torchy-outer" x1="50%" y1="0%" x2="50%" y2="100%">
+          <stop offset="0%" stop-color="var(--t-tip)"/>
+          <stop offset="55%" stop-color="var(--t-mid)"/>
+          <stop offset="100%" stop-color="var(--t-base)"/>
+        </linearGradient>
+        <linearGradient id="torchy-inner" x1="50%" y1="10%" x2="50%" y2="100%">
+          <stop offset="0%" stop-color="var(--t-core-hi)"/>
+          <stop offset="100%" stop-color="var(--t-core)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- soft contact shadow -->
+      <ellipse class="shadow" cx="60" cy="134" rx="26" ry="6" fill="#000" opacity=".18"/>
+
+      <!-- flicker spark above the tip -->
+      <circle class="spark" cx="60" cy="10" r="4" fill="var(--t-tip)"/>
+
+      <!-- outer flame body -->
+      <path class="flame" d="M60 16
+        C44 38 33 53 33 78
+        C33 104 44 124 60 124
+        C76 124 87 104 87 78
+        C87 53 76 38 60 16 Z" fill="url(#torchy-outer)" stroke="var(--t-edge)" stroke-width="2"/>
+
+      <!-- inner flame core -->
+      <path class="core" d="M60 46
+        C50 60 45 70 45 85
+        C45 100 51 112 60 112
+        C69 112 75 100 75 85
+        C75 70 70 60 60 46 Z" fill="url(#torchy-inner)"/>
+
+      <!-- gloss highlight -->
+      <ellipse class="gloss" cx="48" cy="58" rx="8" ry="12" fill="#ffffff" opacity=".28"/>
+
+      <!-- blush -->
+      <ellipse class="blush" cx="47" cy="94" rx="6" ry="4" fill="var(--t-blush)"/>
+      <ellipse class="blush" cx="73" cy="94" rx="6" ry="4" fill="var(--t-blush)"/>
+
+      <!-- eyes (blink via CSS, tracked in JS) -->
+      <g class="eye" style="transform-origin:53px 84px">
+        <ellipse data-pupil cx="53" cy="84" rx="4.5" ry="6" fill="var(--t-ink)"/>
+        <circle cx="51.5" cy="80.5" r="1.4" fill="#fff" opacity=".85"/>
+      </g>
+      <g class="eye" style="transform-origin:67px 84px">
+        <ellipse data-pupil cx="67" cy="84" rx="4.5" ry="6" fill="var(--t-ink)"/>
+        <circle cx="65.5" cy="80.5" r="1.4" fill="#fff" opacity=".85"/>
+      </g>
+
+      <!-- mouths, one per mood -->
+      <path class="m m-idle" d="M55 100 q5 4 10 0" fill="none" stroke="var(--t-ink)" stroke-width="2.2" stroke-linecap="round"/>
+      <path class="m m-think" d="M55 101 h10" fill="none" stroke="var(--t-ink)" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse class="m m-pick" cx="60" cy="101" r="3.5" fill="var(--t-ink)"/>
+      <ellipse class="m m-done" cx="60" cy="101" rx="6" ry="4.5" fill="var(--t-ink)"/>
+
+      <!-- tiny feet, just enough to feel grounded -->
+      <ellipse cx="50" cy="132" rx="8" ry="4" fill="var(--t-base)" opacity=".85"/>
+      <ellipse cx="70" cy="132" rx="8" ry="4" fill="var(--t-base)" opacity=".85"/>
+    </svg>
+    <span class="name">TORCHY</span>
+  </button>
+</div>
+
+<style>
+  .torchy-dock{
+    --t-tip:#ffd66b; --t-mid:#ff8a3d; --t-base:#e8481f;
+    --t-core-hi:#fff2b8; --t-core:#ffb14d;
+    --t-ink:#4a1c0c; --t-blush:#ffb199; --t-edge:rgba(60, 15, 0, .28);
+    position:fixed;right:clamp(9px,2vw,24px);bottom:clamp(9px,2vw,22px);z-index:60;
+    display:flex;align-items:flex-end;gap:10px;pointer-events:none;
+  }
+  .torchy-bubble{max-width:min(48ch,70vw);padding:11px 14px;border:1px solid var(--torch);border-radius:12px;background:var(--panel);box-shadow:0 10px 30px var(--shadow);color:var(--chalk);font-size:13px;line-height:1.5;white-space:pre-line;pointer-events:auto}
+
+  .torchy{pointer-events:auto;background:none;border:0;padding:0;cursor:pointer;
+    width:clamp(64px,9vw,86px);display:grid;justify-items:center;animation:torchy-flicker 2.6s ease-in-out infinite;
+    filter:drop-shadow(0 6px 14px rgba(232,72,31,.35))}
+  .torchy svg{width:100%;height:auto;overflow:visible}
+  .name{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--torch);margin-top:-2px}
+
+  .spark{animation:torchy-spark 1.8s ease-in-out infinite}
+
+  /* a real flame blinks even when nothing else is happening */
+  .eye{transform-box:fill-box;animation:torchy-blink 5.2s ease-in-out infinite}
+  .eye:nth-of-type(2){animation-delay:-.15s}
+
+  .m{display:none}
+  [data-mood="idle"] .m-idle{display:block}
+  [data-mood="think"] .m-think{display:block}
+  [data-mood="think"] .spark{animation:torchy-spark .6s ease-in-out infinite}
+  [data-mood="pick"] .m-pick{display:block}
+  [data-mood="pick"] .torchy{animation:torchy-hop .5s ease-in-out 2}
+  [data-mood="done"] .m-done{display:block}
+  [data-mood="done"] .torchy{animation:torchy-hop .4s ease-in-out 3}
+
+  @keyframes torchy-flicker{
+    0%,100%{transform:translateY(0) rotate(0deg) scaleX(1)}
+    30%{transform:translateY(-3px) rotate(-2deg) scaleX(.98)}
+    60%{transform:translateY(-6px) rotate(2deg) scaleX(1.02)}
+  }
+  @keyframes torchy-spark{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.35)}}
+  @keyframes torchy-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px) rotate(-4deg)}}
+  @keyframes torchy-blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+
+  @media (max-width:620px){.torchy-dock{flex-direction:column;align-items:flex-end}.torchy-bubble{max-width:78vw}}
+  @media (prefers-reduced-motion:reduce){.torchy,.spark,.eye{animation:none}}
+</style>
+
+<script define:vars={{ greeting, tips }}>
+  const dock = document.querySelector('[data-torchy]');
+  const bubble = document.querySelector('[data-torchy-bubble]');
+  const poke = document.querySelector('[data-torchy-poke]');
+  const pupils = dock ? dock.querySelectorAll('[data-pupil]') : [];
+
+  let context = '';
+  let lastMood = 'think';
+  let tip = 0;
+  let timer;
+
+  function speak(text, mood) {
+    if (!dock || !bubble || !text) return;
+    clearTimeout(timer);
+    dock.dataset.mood = mood;
+    bubble.textContent = text;
+    bubble.hidden = false;
+    timer = setTimeout(() => { bubble.hidden = true; dock.dataset.mood = 'idle'; }, 6500);
+  }
+
+  // Torchy explains on its own — opening a card fires torchy:context and
+  // Torchy speaks immediately. No poke required.
+  window.addEventListener('torchy:context', (event) => {
+    const text = event.detail?.text;
+    if (!text) return;
+    context = text;
+    lastMood = event.detail?.mood || 'think';
+    speak(context, lastMood);
+  });
+
+  // Poking Torchy replays the last thing it said, or a general tip before
+  // anything has happened yet.
+  poke?.addEventListener('click', () => {
+    if (context) speak(context, lastMood);
+    else speak(tips[tip++ % tips.length], 'think');
+  });
+
+  // Eyes follow the cursor, same technique as the rest of the family.
+  window.addEventListener('pointermove', (e) => {
+    pupils.forEach((p) => {
+      const r = p.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const m = Math.min(d / 60, 1) * 1.6;
+      p.style.transform = `translate(${(dx / d) * m}px, ${(dy / d) * m}px)`;
+    });
+  }, { passive: true });
+
+  setTimeout(() => speak(greeting, 'idle'), 500);
+</script>

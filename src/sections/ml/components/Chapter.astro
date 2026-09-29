@@ -1,8 +1,7 @@
 ---
-const { n, eyebrow, title, locked = true, next, lockHint = 'Finish the previous mini-game to open this', nextLabel = 'Next: chapter' } = Astro.props;
+const { n, eyebrow, title, next, nextLabel = 'Next: chapter' } = Astro.props;
 ---
-<section class="chapter wrap" data-chapter={n} data-locked={locked ? 'true' : undefined} id={`ch${n}`}>
-  <div class="lock"><span>🔒</span>{lockHint}</div>
+<section class="chapter wrap" data-chapter={n} id={`ch${n}`}>
   <p class="chapter__eyebrow">{eyebrow}</p>
   <h2>{title}</h2>
   <slot />

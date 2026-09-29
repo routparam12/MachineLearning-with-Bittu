@@ -1,0 +1,160 @@
+---
+/* Classy — the OOP lab's pet. Same rig as Transy on the Transformer section
+   (itself modelled on Bittu): a plain SVG creature, no background image,
+   eyes that track the cursor, a blink loop, and moods that swap its face.
+   It explains proactively — opening a pillar card or running its code fires
+   classy:context, and Classy speaks immediately, unprompted, the same way
+   Bittu's say() and Transy's speak() show up as their boards get used. */
+interface Props { name: string; greeting: string; tips: string[] }
+const { name, greeting, tips } = Astro.props;
+---
+<div class="classy-dock" data-classy data-mood="idle" aria-live="polite">
+  <div class="classy-bubble" data-classy-bubble hidden></div>
+
+  <button class="classy" data-classy-poke type="button" aria-label={name} title={name}>
+    <svg viewBox="0 0 120 150" role="img" aria-hidden="true">
+      <!-- antenna -->
+      <g class="antenna">
+        <line x1="60" y1="40" x2="60" y2="16" stroke="var(--c-ink)" stroke-width="3.5" stroke-linecap="round"/>
+        <rect class="bulb" x="51" y="5" width="18" height="15" rx="5" fill="var(--c-gold)"/>
+      </g>
+
+      <!-- head -->
+      <rect x="25" y="35" width="70" height="58" rx="14" fill="var(--c-shell)" stroke="var(--c-edge)" stroke-width="2.5"/>
+      <!-- ear nubs -->
+      <rect x="15" y="56" width="13" height="19" rx="4" fill="var(--c-blue)"/>
+      <rect x="92" y="56" width="13" height="19" rx="4" fill="var(--c-blue)"/>
+
+      <!-- blush -->
+      <ellipse class="blush" cx="31" cy="76" rx="6" ry="4" fill="var(--c-blush)"/>
+      <ellipse class="blush" cx="89" cy="76" rx="6" ry="4" fill="var(--c-blush)"/>
+
+      <!-- face screen -->
+      <rect x="41" y="47" width="38" height="31" rx="9" fill="var(--c-blue)"/>
+      <path class="spark" d="M60 53 l3 5 h-6 z" fill="var(--c-shell)" opacity=".9"/>
+
+      <!-- eyes (blink via CSS, pupils tracked in JS) -->
+      <g class="eye" style="transform-origin:52px 65px">
+        <circle cx="52" cy="65" r="6" fill="var(--c-shell)"/>
+        <circle data-pupil cx="52" cy="65" r="3" fill="var(--c-ink)"/>
+      </g>
+      <g class="eye" style="transform-origin:68px 65px">
+        <circle cx="68" cy="65" r="6" fill="var(--c-shell)"/>
+        <circle data-pupil cx="68" cy="65" r="3" fill="var(--c-ink)"/>
+      </g>
+
+      <!-- mouths, one per mood -->
+      <path class="m m-idle" d="M55 85 q5 4 10 0" fill="none" stroke="var(--c-blush-dark)" stroke-width="2.5" stroke-linecap="round"/>
+      <path class="m m-think" d="M56 86 h8" fill="none" stroke="var(--c-blush-dark)" stroke-width="2.5" stroke-linecap="round"/>
+      <ellipse class="m m-done" cx="60" cy="86" rx="6" ry="4.5" fill="var(--c-blush-dark)"/>
+      <path class="m m-oops" d="M55 88 q5 -5 10 0" fill="none" stroke="var(--c-blush-dark)" stroke-width="2.5" stroke-linecap="round"/>
+
+      <!-- body -->
+      <rect x="27" y="97" width="66" height="43" rx="13" fill="var(--c-shell)" stroke="var(--c-edge)" stroke-width="2.5"/>
+      <circle class="shoulder" cx="39" cy="101" r="2.6" fill="var(--c-ink)"/>
+      <circle class="shoulder" cx="81" cy="101" r="2.6" fill="var(--c-ink)"/>
+      <rect x="49" y="109" width="22" height="16" rx="6" fill="var(--c-blue)"/>
+
+      <!-- feet -->
+      <ellipse cx="45" cy="141" rx="14" ry="7.5" fill="var(--c-shell)" stroke="var(--c-edge)" stroke-width="2.5"/>
+      <ellipse cx="75" cy="141" rx="14" ry="7.5" fill="var(--c-shell)" stroke="var(--c-edge)" stroke-width="2.5"/>
+      <ellipse cx="45" cy="146" rx="10" ry="2.4" fill="var(--c-sole)"/>
+      <ellipse cx="75" cy="146" rx="10" ry="2.4" fill="var(--c-sole)"/>
+    </svg>
+    <span class="name">CLASSY</span>
+  </button>
+</div>
+
+<style>
+  .classy-dock{
+    --c-shell:#f5f8ff; --c-blue:var(--blue); --c-gold:var(--gold); --c-ink:#242b3d;
+    --c-blush:#ffc2d6; --c-blush-dark:#e8749a; --c-edge:rgba(20,30,50,.16); --c-sole:rgba(20,30,50,.14);
+    position:fixed;right:clamp(9px,2vw,24px);bottom:clamp(9px,2vw,22px);z-index:60;
+    display:flex;align-items:flex-end;gap:10px;pointer-events:none;
+  }
+  .classy-bubble{max-width:min(48ch,70vw);padding:11px 14px;border:1px solid var(--c-blue);border-radius:12px;background:var(--panel);box-shadow:0 10px 30px var(--shadow);color:var(--chalk);font-size:13px;line-height:1.5;white-space:pre-line;pointer-events:auto;font-family:var(--body)}
+
+  .classy{pointer-events:auto;background:none;border:0;padding:0;cursor:pointer;
+    width:clamp(70px,10vw,100px);display:grid;justify-items:center;animation:classy-bob 3.4s ease-in-out infinite;
+    filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+  .classy svg{width:100%;height:auto;overflow:visible}
+  .name{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--c-blue);margin-top:-2px}
+
+  .antenna{transform-origin:60px 40px;animation:classy-sway 2.6s ease-in-out infinite}
+  .bulb{opacity:.7}
+
+  /* a real pet blinks even when nothing else is happening */
+  .eye{transform-box:fill-box;animation:classy-blink 5.5s ease-in-out infinite}
+  .eye:nth-of-type(2){animation-delay:-.15s}
+
+  .m{display:none}
+  [data-mood="idle"] .m-idle{display:block}
+  [data-mood="think"] .m-think{display:block}
+  [data-mood="think"] .bulb{opacity:1;animation:classy-flash 1s steps(2) infinite}
+  [data-mood="done"] .m-done{display:block}
+  [data-mood="done"] .classy{animation:classy-hop .4s ease-in-out 3}
+  [data-mood="done"] .bulb{opacity:1}
+  [data-mood="oops"] .m-oops{display:block}
+  [data-mood="oops"] .bulb{opacity:1;fill:var(--bad)}
+
+  @keyframes classy-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes classy-sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+  @keyframes classy-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-16px) rotate(-6deg)}}
+  @keyframes classy-flash{50%{opacity:.35}}
+  @keyframes classy-blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+
+  @media (max-width:620px){.classy-dock{flex-direction:column;align-items:flex-end}.classy-bubble{max-width:78vw}}
+  @media (prefers-reduced-motion:reduce){.classy,.antenna,.eye{animation:none}}
+</style>
+
+<script define:vars={{ greeting, tips }}>
+  const dock = document.querySelector('[data-classy]');
+  const bubble = document.querySelector('[data-classy-bubble]');
+  const poke = document.querySelector('[data-classy-poke]');
+  const pupils = dock ? dock.querySelectorAll('[data-pupil]') : [];
+
+  let context = '';
+  let lastMood = 'think';
+  let tip = 0;
+  let timer;
+
+  function speak(text, mood) {
+    if (!dock || !bubble || !text) return;
+    clearTimeout(timer);
+    dock.dataset.mood = mood;
+    bubble.textContent = text;
+    bubble.hidden = false;
+    timer = setTimeout(() => { bubble.hidden = true; dock.dataset.mood = 'idle'; }, 6500);
+  }
+
+  // Classy explains on its own — opening a card, or running its code, fires
+  // classy:context and Classy speaks immediately. No poke required.
+  window.addEventListener('classy:context', (event) => {
+    const text = event.detail?.text;
+    if (!text) return;
+    context = text;
+    lastMood = event.detail?.mood || 'think';
+    speak(context, lastMood);
+  });
+
+  // Poking Classy replays the last thing it said, or a general tip before
+  // anything has happened yet.
+  poke?.addEventListener('click', () => {
+    if (context) speak(context, lastMood);
+    else speak(tips[tip++ % tips.length], 'think');
+  });
+
+  // Eyes follow the cursor, same technique as Bittu's and Transy's.
+  window.addEventListener('pointermove', (e) => {
+    pupils.forEach((p) => {
+      const r = p.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const m = Math.min(d / 60, 1) * 1.6;
+      p.style.transform = `translate(${(dx / d) * m}px, ${(dy / d) * m}px)`;
+    });
+  }, { passive: true });
+
+  setTimeout(() => speak(greeting, 'idle'), 500);
+</script>

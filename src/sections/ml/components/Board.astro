@@ -36,7 +36,7 @@ const t = getDict(locale);
   </header>
 
   <!-- ————— 1 ————— -->
-  <Chapter n={1} eyebrow={t.ch1.eyebrow} title={t.ch1.title} locked={false} next={2} lockHint={t.lockHint} nextLabel={t.nextChapter}>
+  <Chapter n={1} eyebrow={t.ch1.eyebrow} title={t.ch1.title} next={2} nextLabel={t.nextChapter}>
     <div class="grid2">
       <div class="sketch">
         <p><b>{t.ch1.quoteBold}</b>{t.ch1.quoteAfter} <small>{t.ch1.quoteAttr}</small></p>
@@ -56,7 +56,7 @@ const t = getDict(locale);
   </Chapter>
 
   <!-- ————— 2 ————— -->
-  <Chapter n={2} eyebrow={t.ch2.eyebrow} title={t.ch2.title} next={3} lockHint={t.lockHint} nextLabel={t.nextChapter}>
+  <Chapter n={2} eyebrow={t.ch2.eyebrow} title={t.ch2.title} next={3} nextLabel={t.nextChapter}>
     <div class="grid2">
       <div class="sketch">
         <p>
@@ -79,7 +79,7 @@ const t = getDict(locale);
   </Chapter>
 
   <!-- ————— 3 ————— -->
-  <Chapter n={3} eyebrow={t.ch3.eyebrow} title={t.ch3.title} next={4} lockHint={t.lockHint} nextLabel={t.nextChapter}>
+  <Chapter n={3} eyebrow={t.ch3.eyebrow} title={t.ch3.title} next={4} nextLabel={t.nextChapter}>
     <p>
       {t.ch3.p1} <Term def={t.terms.regression}>regression</Term>{t.ch3.p1b}
       <Term def={t.terms.loss}>loss</Term> {t.ch3.p1c}
@@ -91,7 +91,7 @@ const t = getDict(locale);
   </Chapter>
 
   <!-- ————— 4 ————— -->
-  <Chapter n={4} eyebrow={t.ch4.eyebrow} title={t.ch4.title} next={5} lockHint={t.lockHint} nextLabel={t.nextChapter}>
+  <Chapter n={4} eyebrow={t.ch4.eyebrow} title={t.ch4.title} next={5} nextLabel={t.nextChapter}>
     <p>
       {t.ch4.p1} <Term def={t.terms.classification}>classification</Term>{t.ch4.p1b}
       <Term def={t.terms.decisionBoundary}>decision boundary</Term> {t.ch4.p1c}
@@ -103,7 +103,7 @@ const t = getDict(locale);
   </Chapter>
 
   <!-- ————— 5 ————— -->
-  <Chapter n={5} eyebrow={t.ch5.eyebrow} title={t.ch5.title} next={6} lockHint={t.lockHint} nextLabel={t.nextChapter}>
+  <Chapter n={5} eyebrow={t.ch5.eyebrow} title={t.ch5.title} next={6} nextLabel={t.nextChapter}>
     <div class="grid2">
       <div class="sketch sketch--alt">
         <p>
@@ -124,7 +124,7 @@ const t = getDict(locale);
   </Chapter>
 
   <!-- ————— 6 ————— -->
-  <Chapter n={6} eyebrow={t.ch6.eyebrow} title={t.ch6.title} lockHint={t.lockHint}>
+  <Chapter n={6} eyebrow={t.ch6.eyebrow} title={t.ch6.title} next={7} nextLabel={t.nextChapter}>
     <div class="grid2">
       <div class="sketch">
         <p>
@@ -146,8 +146,7 @@ const t = getDict(locale);
   </Chapter>
 
   <!-- ————— next ————— -->
-  <section class="chapter wrap" data-chapter={7} data-locked="true">
-    <div class="lock"><span>🔒</span>{t.roadmap.locked}</div>
+  <section class="chapter wrap" data-chapter={7}>
     <p class="chapter__eyebrow">{t.roadmap.eyebrow}</p>
     <h2>{t.roadmap.title}</h2>
     <p>{t.roadmap.intro}</p>

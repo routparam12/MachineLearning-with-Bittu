@@ -317,9 +317,9 @@ export function mount(root, dict, loaders) {
     $('prev').disabled = i === 0;
     $('next').disabled = i === frames.length - 1;
     $('word').disabled = i === frames.length - 1;
-    const transyMood = f.stage === 'done' ? 'done' : f.stage === 'sample' || f.stage === 'append' ? 'pick' : 'think';
-    const transyExample = d.transyExamples[f.stage] || d.transyExamples.default;
-    window.dispatchEvent(new CustomEvent('transy:context', { detail: { text: tr(d, f.say), example: transyExample, mood: transyMood } }));
+    const seedyMood = f.stage === 'done' ? 'done' : f.stage === 'sample' || f.stage === 'append' ? 'pick' : 'think';
+    const seedyExample = d.seedyExamples[f.stage] || d.seedyExamples.default;
+    window.dispatchEvent(new CustomEvent('seedy:context', { detail: { text: tr(d, f.say), example: seedyExample, mood: seedyMood } }));
     const cue = f.picked ? 'lock' : f.stage === 'attnsoftmax' ? 'pop' : f.stage === 'append' ? 'write' : 'compare';
     sound.play(cue);
   }

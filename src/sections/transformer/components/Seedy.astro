@@ -1,0 +1,175 @@
+---
+/* Seedy — the transformer lab's pet: an original, small-white-blob-with-a-
+   green-sprout mascot (not a copy of any proprietary character — own shape,
+   own palette, own construction). Same rig as Bittu/Classy underneath: eyes
+   that track the cursor, a blink loop, moods that swap its face, and
+   proactive explaining — every step the engine plays fires seedy:context
+   and Seedy speaks it immediately, unprompted. */
+interface Props { name: string; tips: string[] }
+const { name, tips } = Astro.props;
+---
+<div class="seedy-dock" data-seedy data-mood="idle" aria-live="polite">
+  <div class="seedy-bubble" data-seedy-bubble hidden></div>
+
+  <button class="seedy" data-seedy-poke type="button" aria-label={name} title={name}>
+    <svg viewBox="0 0 120 132" role="img" aria-hidden="true">
+      <defs>
+        <radialGradient id="seedy-body" cx="34%" cy="28%" r="78%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="62%" stop-color="var(--s-shell)"/>
+          <stop offset="100%" stop-color="var(--s-shell-shade)"/>
+        </radialGradient>
+        <linearGradient id="seedy-leaf-l" x1="100%" y1="100%" x2="10%" y2="0%">
+          <stop offset="0%" stop-color="var(--s-leaf)"/>
+          <stop offset="100%" stop-color="var(--s-leaf-light)"/>
+        </linearGradient>
+        <linearGradient id="seedy-leaf-r" x1="0%" y1="100%" x2="90%" y2="0%">
+          <stop offset="0%" stop-color="var(--s-leaf)"/>
+          <stop offset="100%" stop-color="var(--s-leaf-light)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- soft contact shadow -->
+      <ellipse class="shadow" cx="60" cy="120" rx="30" ry="6" fill="#000" opacity=".18"/>
+
+      <!-- sprout -->
+      <g class="sprout">
+        <path d="M60 40 C60 40 41 34 40 16 C58 17 62 30 62 40 Z" fill="url(#seedy-leaf-l)"/>
+        <path d="M60 40 C60 40 79 34 80 16 C62 17 58 30 58 40 Z" fill="url(#seedy-leaf-r)"/>
+        <path class="vein" d="M60 40 C59 32 57 24 51 18" fill="none" stroke="var(--s-leaf)" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>
+        <path class="vein" d="M60 40 C61 32 63 24 69 18" fill="none" stroke="var(--s-leaf)" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>
+        <circle class="bulb" cx="60" cy="38" r="4" fill="var(--s-leaf-light)"/>
+      </g>
+
+      <!-- body: a soft rounded blob -->
+      <path class="body" d="M60 34
+        C84 34 100 52 100 76
+        C100 102 82 120 60 120
+        C38 120 20 102 20 76
+        C20 52 36 34 60 34 Z" fill="url(#seedy-body)" stroke="var(--s-edge)" stroke-width="2"/>
+      <!-- gloss highlight -->
+      <ellipse class="gloss" cx="42" cy="56" rx="14" ry="9" fill="#ffffff" opacity=".55"/>
+
+      <!-- blush -->
+      <ellipse class="blush" cx="35" cy="86" rx="7" ry="4.5" fill="var(--s-blush)"/>
+      <ellipse class="blush" cx="85" cy="86" rx="7" ry="4.5" fill="var(--s-blush)"/>
+
+      <!-- eyes (blink via CSS, tracked in JS) -->
+      <g class="eye" style="transform-origin:47px 76px">
+        <ellipse data-pupil cx="47" cy="76" rx="4.5" ry="6" fill="var(--s-ink)"/>
+        <circle cx="45.5" cy="72.5" r="1.4" fill="#fff" opacity=".85"/>
+      </g>
+      <g class="eye" style="transform-origin:73px 76px">
+        <ellipse data-pupil cx="73" cy="76" rx="4.5" ry="6" fill="var(--s-ink)"/>
+        <circle cx="71.5" cy="72.5" r="1.4" fill="#fff" opacity=".85"/>
+      </g>
+
+      <!-- mouths, one per mood -->
+      <path class="m m-idle" d="M54 92 q6 5 12 0" fill="none" stroke="var(--s-ink)" stroke-width="2.2" stroke-linecap="round"/>
+      <path class="m m-think" d="M55 93 h10" fill="none" stroke="var(--s-ink)" stroke-width="2.2" stroke-linecap="round"/>
+      <ellipse class="m m-pick" cx="60" cy="93" rx="4" ry="4" fill="var(--s-ink)"/>
+      <ellipse class="m m-done" cx="60" cy="93" rx="7" ry="5.5" fill="var(--s-ink)"/>
+    </svg>
+    <span class="name">SEEDY</span>
+  </button>
+</div>
+
+<style>
+  .seedy-dock{
+    --s-shell:#eef2f9; --s-shell-shade:#c9d3e4; --s-edge:rgba(30,40,70,.14);
+    --s-ink:#2b3245; --s-leaf:#2fae66; --s-leaf-light:#8ce6ac; --s-blush:#ffd1de;
+    position:fixed;right:clamp(9px,2vw,24px);bottom:clamp(9px,2vw,22px);z-index:60;
+    display:flex;align-items:flex-end;gap:10px;pointer-events:none;
+  }
+  .seedy-bubble{max-width:min(48ch,70vw);padding:11px 14px;border:1px solid var(--s-leaf);border-radius:12px;background:var(--panel);box-shadow:0 10px 30px var(--shadow);color:var(--chalk);font-size:13px;line-height:1.5;white-space:pre-line;pointer-events:auto}
+
+  .seedy{pointer-events:auto;background:none;border:0;padding:0;cursor:pointer;
+    width:clamp(66px,9.5vw,92px);display:grid;justify-items:center;animation:seedy-float 3.6s ease-in-out infinite;
+    filter:drop-shadow(0 6px 12px rgba(0,0,0,.3))}
+  .seedy svg{width:100%;height:auto;overflow:visible}
+  .name{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--s-leaf);margin-top:-2px}
+
+  .body{animation:seedy-squish 3.6s ease-in-out infinite}
+  .shadow{animation:seedy-shadow 3.6s ease-in-out infinite}
+  .sprout{transform-origin:60px 40px;animation:seedy-sway 2.8s ease-in-out infinite}
+  .bulb{opacity:.45}
+
+  /* a real pet blinks even when nothing else is happening */
+  .eye{transform-box:fill-box;animation:seedy-blink 5.2s ease-in-out infinite}
+  .eye:nth-of-type(2){animation-delay:-.15s}
+
+  .m{display:none}
+  [data-mood="idle"] .m-idle{display:block}
+  [data-mood="think"] .m-think{display:block}
+  [data-mood="think"] .bulb{opacity:1;animation:seedy-flash 1s steps(2) infinite}
+  [data-mood="pick"] .m-pick{display:block}
+  [data-mood="pick"] .seedy{animation:seedy-hop .5s ease-in-out 2}
+  [data-mood="pick"] .bulb{opacity:1}
+  [data-mood="done"] .m-done{display:block}
+  [data-mood="done"] .seedy{animation:seedy-hop .4s ease-in-out 3}
+  [data-mood="done"] .bulb{opacity:1}
+
+  @keyframes seedy-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes seedy-squish{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.97)}}
+  @keyframes seedy-shadow{0%,100%{transform:scaleX(1);opacity:.18}50%{transform:scaleX(.85);opacity:.12}}
+  @keyframes seedy-sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  @keyframes seedy-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px) rotate(-4deg)}}
+  @keyframes seedy-flash{50%{opacity:.4}}
+  @keyframes seedy-blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+
+  @media (max-width:620px){.seedy-dock{flex-direction:column;align-items:flex-end}.seedy-bubble{max-width:78vw}}
+  @media (prefers-reduced-motion:reduce){.seedy,.body,.shadow,.sprout,.eye{animation:none}}
+</style>
+
+<script define:vars={{ tips }}>
+  const dock = document.querySelector('[data-seedy]');
+  const bubble = document.querySelector('[data-seedy-bubble]');
+  const poke = document.querySelector('[data-seedy-poke]');
+  const pupils = dock ? dock.querySelectorAll('[data-pupil]') : [];
+
+  let context = '';
+  let example = '';
+  let lastMood = 'think';
+  let tip = 0;
+  let timer;
+
+  function speak(text, mood, ex) {
+    if (!dock || !bubble || !text) return;
+    clearTimeout(timer);
+    dock.dataset.mood = mood;
+    bubble.textContent = ex ? `${text}\n\nCode example\n${ex}` : text;
+    bubble.hidden = false;
+    timer = setTimeout(() => { bubble.hidden = true; dock.dataset.mood = 'idle'; }, 6500);
+  }
+
+  // Seedy explains on its own the moment a step plays — same as Bittu's
+  // say() firing unprompted as the ML mini-games run. No poke required.
+  window.addEventListener('seedy:context', (event) => {
+    const text = event.detail?.text;
+    if (!text) return;
+    context = text;
+    example = event.detail?.example || '';
+    lastMood = event.detail?.mood || 'think';
+    speak(context, lastMood, example);
+  });
+
+  // Poking Seedy replays the last thing it said (handy once the bubble has
+  // faded), or a general tip before anything has run yet.
+  poke?.addEventListener('click', () => {
+    if (context) speak(context, lastMood, example);
+    else speak(tips[tip++ % tips.length], 'think');
+  });
+
+  // Eyes follow the cursor, same technique as Bittu's — small range since
+  // this face's eyes are tiny.
+  window.addEventListener('pointermove', (e) => {
+    pupils.forEach((p) => {
+      const r = p.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const m = Math.min(d / 60, 1) * 1.8;
+      p.style.transform = `translate(${(dx / d) * m}px, ${(dy / d) * m}px)`;
+    });
+  }, { passive: true });
+</script>

@@ -64,7 +64,7 @@ export const hi: Dict = {
     exploreReference: 'Architecture reference dekho',
     transformerBlocks: 'TRANSFORMER BLOCKS',
     transformerBlocksHint: 'causal self-attention + feed-forward',
-    transyName: 'Transy — is step ki explanation ke liye tap karo',
+    seedyName: 'Seedy — is step ki explanation ke liye tap karo',
     codeTitle: 'Code kya kar raha hai',
     streamTitle: 'Residual stream',
     streamHint: 'har token ki ek row · har dimension ka ek column',
@@ -254,13 +254,13 @@ export const hi: Dict = {
       `Yahi poori machine hai: ${n} shabd likhe, har ek ${l} block${Number(l) > 1 ? 's' : ''} ka poora chakkar. Asli models bilkul yahi karte hain, bas kahin zyada chaude aur kahin zyada baar.`,
   },
 
-  transyTips: [
-    'Main Transy hoon, aapka chhota transformer terminal. Model ko step karte waqt mujhe tap karo aur main current operation samjhaunga.',
+  seedyTips: [
+    'Main Seedy hoon, aapka chhota transformer terminal. Model ko step karte waqt mujhe tap karo aur main current operation samjhaunga.',
     'Network ke andar tokens nahi badalte. Unke hidden-state vectors badalte hain.',
     'Causal attention token ko sirf khud aur pehle ke tokens dekhne deta hai — future ko kabhi nahi.',
   ],
 
-  transyExamples: {
+  seedyExamples: {
     default: 'x = transformer(x)',
     tokenize: 'ids = tokenizer("the weather is")',
     embed: 'x = tokenEmbedding[ids]',

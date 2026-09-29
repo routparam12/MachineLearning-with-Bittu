@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+/* ══════════════════════════════════════════════════════════════
+   Theme tokens. Dark is the default; [data-theme="light"] swaps the
+   palette. Same approach as transformer.css — a theme only redefines this block.
+   Colour pair is Python's own: blue for structure, gold for the "run" action.
+   ══════════════════════════════════════════════════════════════ */
+:root,
+:root[data-theme="dark"]{
+  --ink:#0f1420; --panel:#161d2c; --panel2:#1d2740; --edge:#2c3a56;
+  --chalk:#eef2fb; --mute:#93a1c2;
+  --blue:#4b95e0; --gold:#f2c14e; --ok:#5fd38a; --bad:#ff7b72;
+  --on-accent:#08111f;
+  --shadow:rgba(0,0,0,.45);
+
+  --display:"Caveat","Comic Sans MS",cursive;
+  --body:"Bricolage Grotesque",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+
+  --grid-line: rgba(75, 149, 224, 0.05);
+  --hero-glow: rgba(75, 149, 224, 0.09);
+}
+
+:root[data-theme="light"]{
+  --ink:#f7f9fd; --panel:#ffffff; --panel2:#eef3fb; --edge:#d7e1f2;
+  --chalk:#101728; --mute:#5b6a8a;
+  --blue:#2c6cb8; --gold:#a9760f; --ok:#1f8f5a; --bad:#c73d34;
+  --on-accent:#ffffff;
+  --shadow:rgba(30,50,90,.14);
+
+  --grid-line: rgba(44, 108, 184, 0.07);
+  --hero-glow: rgba(44, 108, 184, 0.12);
+}
+
+*{box-sizing:border-box}
+body{margin:0;color:var(--chalk);font-family:var(--body);-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(ellipse at 20% -10%, var(--hero-glow), transparent 55%),
+    repeating-linear-gradient(0deg, transparent 0 39px, var(--grid-line) 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 39px, var(--grid-line) 39px 40px),
+    var(--ink);
+  transition: background-color .25s ease, color .25s ease;
+}
+h1,h2,h3{font-family:var(--display);color:var(--chalk);font-weight:700;line-height:1.05;margin:0 0 .3em;letter-spacing:.01em}
+h1{font-size:clamp(40px,6.4vw,70px)}
+h2{font-size:clamp(28px,3.6vw,40px)}
+h3{font-size:clamp(20px,2.2vw,26px);color:var(--chalk)}
+p{margin:0 0 .8em}
+a{color:var(--blue)}
+main{display:block}
+
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:78px 20px 80px}
+
+/* ── chrome (fixed glass pill, same on every section) ─────────── */
+.chrome{position:fixed;top:clamp(8px,1.6vw,16px);right:clamp(8px,2vw,20px);z-index:60;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(20,27,22,.78);border:1px solid var(--edge);border-radius:999px;
+  padding:6px;backdrop-filter:blur(6px)}
+:root[data-theme="light"] .chrome{background:rgba(255,250,240,.85)}
+.chrome-tools{display:flex;align-items:center;gap:8px}
+.langsw{display:flex;background:var(--ink);border:1px solid var(--edge);border-radius:999px;padding:2px;gap:2px}
+.langopt{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-decoration:none;
+  color:var(--mute);padding:6px 10px;border-radius:999px;transition:.15s}
+.langopt:hover{color:var(--chalk)}
+.langopt.on{background:var(--blue);color:var(--on-accent)}
+.iconbtn{width:32px;height:32px;display:grid;place-items:center;cursor:pointer;font-size:14px;line-height:1;
+  background:var(--ink);border:1px solid var(--edge);border-radius:50%;transition:transform .12s ease}
+.iconbtn:hover{transform:scale(1.08)}
+
+@media (max-width:620px){
+  .chrome{top:8px;right:8px;padding:5px;gap:6px}
+  .iconbtn{width:28px;height:28px;font-size:12px}
+  .langopt{padding:5px 8px;font-size:10px}
+}
+
+/* ── header ─────────────────────────────────────────────────── */
+.back{font-family:var(--mono);font-size:12px;text-decoration:none;letter-spacing:.04em;color:var(--mute)}
+.back:hover{text-decoration:underline;color:var(--chalk)}
+.head h1{margin:10px 0 6px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.head h1 em{font-style:normal;color:var(--blue)}
+.tagline{margin:0 0 22px;color:var(--mute);font-size:16px;max-width:74ch;line-height:1.6}
+
+/* ── generic content card (intro / class&object) ───────────────── */
+.content-card{background:var(--panel);border:1px solid var(--edge);border-radius:16px;
+  padding:20px 22px;box-shadow:0 14px 32px var(--shadow);margin:0 0 20px}
+.content-card h3{margin:0 0 8px}
+.content-card p{color:var(--mute);font-size:14.5px;line-height:1.6}
+.content-card p:last-child{margin-bottom:0}
+.kicker{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--blue);margin:0 0 8px}
+
+/* ── code block + run panel (shared by intro and cards) ────────── */
+.pybox{margin-top:14px;border:1px solid var(--edge);border-radius:12px;overflow:hidden;background:var(--ink)}
+.pybox-head{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:9px 12px;background:var(--panel2);border-bottom:1px solid var(--edge)}
+.pybox-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.pybox pre{margin:0;padding:14px 16px;overflow-x:auto}
+.pybox code{font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--chalk);white-space:pre}
+
+.runbtn{appearance:none;cursor:pointer;background:var(--gold);border:1px solid var(--gold);
+  border-radius:8px;color:var(--on-accent);padding:7px 13px;font-family:var(--display);
+  font-size:15px;font-weight:700;transition:transform .12s ease,box-shadow .12s ease}
+.runbtn:hover:not(:disabled){transform:translateY(-1px)}
+.runbtn:disabled{opacity:.6;cursor:progress}
+
+.pyresult{border-top:1px dashed var(--edge)}
+.pyresult:empty{display:none}
+.pyresult-inner{padding:12px 16px;font-family:var(--mono);font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+.pyresult.ok .pyresult-inner{color:var(--ok)}
+.pyresult.err .pyresult-inner{color:var(--bad)}
+.pyresult.pending .pyresult-inner{color:var(--mute);font-style:italic}
+.pyresult-tag{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mute);margin-bottom:5px}
+.pyresult.ok .pyresult-tag{color:var(--ok)}
+.pyresult.err .pyresult-tag{color:var(--bad)}
+
+.expected{margin-top:10px}
+.expected summary{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mute);cursor:pointer;list-style:none}
+.expected summary::-webkit-details-marker{display:none}
+.expected summary::before{content:'+ '}
+.expected[open] summary::before{content:'– '}
+.expected pre{margin:8px 0 0;padding:10px 14px;background:var(--panel2);border:1px solid var(--edge);
+  border-radius:8px;font-family:var(--mono);font-size:12px;color:var(--mute);white-space:pre-wrap}
+
+.pyodide-note{margin:8px 0 0;font-size:11.5px;color:var(--mute);font-style:italic}
+
+/* ── pillars: card grid ─────────────────────────────────────── */
+.pillars-head{margin:34px 0 16px}
+.pillars-head p{color:var(--mute);font-size:14.5px}
+.pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.pillars{grid-template-columns:1fr}}
+
+.pillar{background:var(--panel);border:1px solid var(--edge);border-radius:16px;
+  box-shadow:0 14px 32px var(--shadow);overflow:hidden}
+.pillar-summary{cursor:pointer;list-style:none;padding:18px 20px;display:flex;gap:14px;align-items:flex-start}
+.pillar-summary::-webkit-details-marker{display:none}
+.pillar-icon{font-size:26px;line-height:1;flex:none}
+.pillar-title{margin:0 0 4px;font-size:clamp(21px,2.6vw,26px)}
+.pillar-oneliner{margin:0;color:var(--mute);font-size:13.5px;line-height:1.5}
+.pillar-chevron{margin-left:auto;flex:none;font-family:var(--mono);font-size:12px;color:var(--mute);
+  transition:transform .2s ease}
+.pillar[open] .pillar-chevron{transform:rotate(180deg)}
+.pillar-body{padding:0 20px 22px;border-top:1px solid var(--edge);padding-top:16px}
+.pillar-section{margin-bottom:16px}
+.pillar-section:last-child{margin-bottom:0}
+.pillar-section h4{margin:0 0 6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--blue)}
+.pillar-section p{margin:0;color:var(--mute);font-size:14px;line-height:1.6}
+.real-life{background:var(--panel2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;
+  padding:10px 14px;font-size:13.5px;color:var(--chalk)}
+
+/* ── recap table ────────────────────────────────────────────── */
+.recap{margin-top:36px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;
+  padding:20px 22px;box-shadow:0 14px 32px var(--shadow);overflow-x:auto}
+.recap table{border-collapse:collapse;width:100%;min-width:520px}
+.recap th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mute);padding:0 12px 10px;border-bottom:1px solid var(--edge)}
+.recap td{padding:10px 12px;border-bottom:1px solid var(--edge);font-size:13.5px;vertical-align:top}
+.recap tr:last-child td{border-bottom:0}
+.recap td:first-child{font-weight:600;color:var(--blue);white-space:nowrap}
+
+.foot{font-family:var(--mono);font-size:12px;color:var(--mute);padding-top:26px}
+
+@media (max-width:640px){
+  .wrap{padding:18px 14px 60px}
+  .pybox pre{padding:12px}
+}

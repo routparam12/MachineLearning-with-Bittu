@@ -63,26 +63,35 @@ p{margin:0 0 .8em}
 a{color:var(--chalk)}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   background:radial-gradient(120% 80% at 50% 0%,transparent 20%,var(--ink) 78%);}
-.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:26px 20px 70px}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:78px 20px 70px}
 a{color:var(--pet)}
 button,input{font-family:inherit}
 :focus-visible{outline:2px solid var(--torch);outline-offset:2px}
 
 /* ── top bar: brand · language · sound · theme ── */
-.chrome{position:relative;z-index:5;max-width:1180px;margin:0 auto;padding:14px 20px 0;
-  display:flex;align-items:center;gap:12px;justify-content:flex-end;min-height:48px}
+.chrome{position:fixed;top:clamp(8px,1.6vw,16px);right:clamp(8px,2vw,20px);z-index:60;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(20,27,22,.78);border:1px solid var(--edge);border-radius:999px;
+  padding:6px;backdrop-filter:blur(6px)}
+:root[data-theme="light"] .chrome{background:rgba(255,250,240,.85)}
 .brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--chalk);
   font-weight:800;letter-spacing:-.02em;font-size:17px}
 .brand-dot{font-size:20px}
 .chrome-tools{display:flex;align-items:center;gap:8px}
-.langsw{display:flex;background:var(--panel);border:1px solid var(--edge);border-radius:9px;padding:2px;gap:2px}
+.langsw{display:flex;background:var(--ink);border:1px solid var(--edge);border-radius:999px;padding:2px;gap:2px}
 .langopt{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-decoration:none;
-  color:var(--mute);padding:5px 9px;border-radius:7px;transition:.15s}
+  color:var(--mute);padding:6px 10px;border-radius:999px;transition:.15s}
 .langopt:hover{color:var(--chalk)}
 .langopt.on{background:var(--pet);color:var(--on-accent)}
-.iconbtn{width:34px;height:34px;display:grid;place-items:center;cursor:pointer;font-size:15px;line-height:1;
-  background:var(--panel);border:1px solid var(--edge);border-radius:9px;transition:.15s}
-.iconbtn:hover{border-color:var(--pet);transform:translateY(-1px)}
+.iconbtn{width:32px;height:32px;display:grid;place-items:center;cursor:pointer;font-size:14px;line-height:1;
+  background:var(--ink);border:1px solid var(--edge);border-radius:50%;transition:transform .12s ease}
+.iconbtn:hover{transform:scale(1.08)}
+
+@media (max-width:620px){
+  .chrome{top:8px;right:8px;padding:5px;gap:6px}
+  .iconbtn{width:28px;height:28px;font-size:12px}
+  .langopt{padding:5px 8px;font-size:10px}
+}
 
 /* ── header ── */
 .back{font-family:var(--mono);font-size:12px;text-decoration:none;letter-spacing:.04em}

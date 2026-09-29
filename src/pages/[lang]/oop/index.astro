@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../sections/oop/Layout.astro';
+import { langPaths, type Lang } from '../../../sections/oop/i18n';
+
+export const getStaticPaths = langPaths;
+
+const lang = Astro.params.lang as Lang;
+---
+<BaseLayout lang={lang}>
+  <div id="app" data-lang={lang} data-home={`/${lang}/`}></div>
+</BaseLayout>
+
+<script>
+  import { mount } from '../../../sections/oop/scripts/ui.js';
+
+  const el = document.querySelector('#app');
+  if (el) {
+    const dict = el.dataset.lang === 'hi'
+      ? (await import('../../../sections/oop/i18n/hi')).hi
+      : (await import('../../../sections/oop/i18n/en')).en;
+    mount(el, dict);
+  }
+</script>

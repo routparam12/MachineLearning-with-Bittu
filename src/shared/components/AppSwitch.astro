@@ -79,4 +79,11 @@ const lang = locale === 'hi' ? 'hi' : 'en';
     .appswitch__icon { font-size: 16px; }
     .appswitch__opt.on .appswitch__label { display: inline; margin-left: 1px; }
   }
+
+  /* Below ~520px even the active label has to go — six sections plus the
+     fixed toolbar on the right no longer both fit with it shown. */
+  @media (max-width: 520px) {
+    .appswitch__opt.on .appswitch__label { display: none; }
+    .appswitch__opt { padding: 6px 8px; }
+  }
 </style>
