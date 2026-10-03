@@ -100,6 +100,24 @@ main{display:block}
 .card2-body{padding:0 16px 16px;border-top:1px solid var(--edge);padding-top:12px}
 .card2-body p{color:var(--mute);font-size:14px;line-height:1.65;margin:0 0 12px}
 
+/* ── why / how / solves triad ────────────────────────────── */
+.card-triad{display:grid;gap:8px;margin:2px 0 14px}
+.triad-row{
+  display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:baseline;
+  padding:8px 12px;border-radius:9px;border:1px solid var(--edge);background:var(--panel2);
+}
+@media (max-width:640px){
+  .triad-row{grid-template-columns:1fr;gap:4px}
+}
+.triad-badge{
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 7px;border-radius:5px;width:fit-content;
+}
+.triad-why .triad-badge{background:color-mix(in srgb,var(--flame) 18%,transparent);color:var(--flame);border:1px solid color-mix(in srgb,var(--flame) 40%,transparent)}
+.triad-how .triad-badge{background:color-mix(in srgb,var(--torch) 18%,transparent);color:var(--torch);border:1px solid color-mix(in srgb,var(--torch) 40%,transparent)}
+.triad-solves .triad-badge{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent)}
+.triad-text{margin:0 !important;color:var(--chalk) !important;font-size:13.5px !important;line-height:1.55 !important}
+
 /* ── code block + expected output ─────────────────────────── */
 .codebox{margin-top:4px;border:1px solid var(--edge);border-radius:10px;overflow:hidden;background:var(--ink)}
 .codebox-head{padding:7px 12px;background:var(--panel2);border-bottom:1px solid var(--edge);

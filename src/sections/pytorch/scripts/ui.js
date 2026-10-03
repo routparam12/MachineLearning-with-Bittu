@@ -30,6 +30,26 @@ function codebox(d, code, output) {
 }
 
 function card(d, c) {
+  const hasTriad = c.why || c.how || c.solves;
+  const triadHtml = hasTriad ? `
+    <div class="card-triad">
+      ${c.why ? `
+      <div class="triad-row triad-why">
+        <span class="triad-badge">${esc(d.ui.whyLabel || 'Why required?')}</span>
+        <p class="triad-text">${esc(c.why)}</p>
+      </div>` : ''}
+      ${c.how ? `
+      <div class="triad-row triad-how">
+        <span class="triad-badge">${esc(d.ui.howLabel || 'How it works?')}</span>
+        <p class="triad-text">${esc(c.how)}</p>
+      </div>` : ''}
+      ${c.solves ? `
+      <div class="triad-row triad-solves">
+        <span class="triad-badge">${esc(d.ui.solvesLabel || 'Problem solves')}</span>
+        <p class="triad-text">${esc(c.solves)}</p>
+      </div>` : ''}
+    </div>` : `<p>${esc(c.desc)}</p>`;
+
   return `
 <details class="card2" data-card-num="${c.num}">
   <summary class="card2-summary">
@@ -38,7 +58,7 @@ function card(d, c) {
     <span class="card2-chevron">▾</span>
   </summary>
   <div class="card2-body">
-    <p>${esc(c.desc)}</p>
+    ${triadHtml}
     ${codebox(d, c.code, c.output)}
   </div>
 </details>`;
@@ -91,7 +111,10 @@ function wireCards(root, d) {
     el.addEventListener('toggle', () => {
       if (!el.open) return;
       const c = byNum.get(el.dataset.cardNum);
-      if (c) tellTorchy(c.desc, 'think');
+      if (c) {
+        const text = c.why ? `${c.why} ${c.solves || ''}` : c.desc;
+        tellTorchy(text, 'think');
+      }
     });
   });
 }

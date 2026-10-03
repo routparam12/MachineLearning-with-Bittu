@@ -18,6 +18,9 @@ export const en = {
     pyodideNote: 'PyTorch cannot run live in this browser — there is no WASM build of it, and a browser sandbox has no GPU access regardless — so there is no "Run" button here. Every code block is paired with its real, pre-computed output behind "+ OUTPUT" — run it on your own machine to verify it yourself.',
     outputLabel: 'Output',
     tocLabel: 'Parts',
+    whyLabel: 'Why required?',
+    howLabel: 'How it works?',
+    solvesLabel: 'Problem solves',
   },
 
   pet: {
@@ -38,7 +41,10 @@ export const en = {
       cards: [
         {
           num: 1, title: 'Tensor',
-          desc: "A tensor is PyTorch's most basic data structure — a multi-dimensional array like a NumPy array, but with GPU support and automatic differentiation (Autograd) built in. Every deep-learning calculation (weights, inputs, gradients) runs on tensors, which is why plain NumPy isn't enough. Create one with `torch.tensor()` — it can be a scalar, vector, matrix, or higher-dimensional.",
+          why: "All deep learning computations (weights, inputs, gradients) run on tensors. Plain NumPy is CPU-only, whereas tensors provide GPU acceleration and automatic gradient tracking.",
+          how: "Created with torch.tensor(). Holds n-dimensional numerical data across scalars (0D), vectors (1D), matrices (2D), and multi-dimensional arrays.",
+          solves: "Eliminates NumPy's limitations by enabling GPU acceleration and automatic differentiation for neural networks.",
+          desc: "A tensor is PyTorch's fundamental multi-dimensional data structure with GPU acceleration and Autograd support.",
           code: `import torch
 
 # Creating tensors
@@ -64,7 +70,10 @@ tensor([[[1, 2],
         },
         {
           num: 2, title: 'Shape',
-          desc: "Shape tells you how many dimensions a tensor has and how many elements sit in each — `(3, 4)` means 3 rows, 4 columns. Getting shapes to match between layers matters, or you get an error. Read it with `.shape`/`.size()`, and change it with `.view()`, `.reshape()`, `.unsqueeze()`, `.squeeze()`.",
+          why: "Neural network layers expect exact matrix and batch dimensions. A single dimension mismatch causes runtime matrix multiplication errors.",
+          how: "Inspected via .shape or .size(), and reshaped using .view(), .reshape(), .unsqueeze() (add dim), and .squeeze() (remove dim).",
+          solves: "Prevents dimension mismatch bugs and transforms tensors across batches, channels, and feature dimensions without copying memory where possible.",
+          desc: "Shape defines tensor dimensions and element counts, modified via view, reshape, squeeze, and unsqueeze.",
           code: `x = torch.randn(2, 3, 4)          # 2 batches, 3 rows, 4 columns
 print(x.shape)                    # torch.Size([2, 3, 4])
 print(x.size())                   # same
@@ -81,7 +90,10 @@ torch.Size([2, 12]) torch.Size([6, 4]) torch.Size([1, 2, 3, 4]) torch.Size([2, 3
         },
         {
           num: 3, title: 'dtype',
-          desc: "dtype tells you what kind of data a tensor stores — float32, int64, bool, and so on. Weights are usually float32, labels are usually int64/long, and picking the right dtype matters for both memory and speed. Set it at creation with `dtype=`, or convert later with `.to()` / `.type()`.",
+          why: "Models need precision control (e.g. float32 for weights, int64 for classification labels) to manage memory footprint and computational speed.",
+          how: "Specified at creation with dtype=torch.float32 or cast later using .to(dtype), .float(), or .long().",
+          solves: "Avoids type incompatibility errors and reduces GPU memory consumption via lower-precision formats.",
+          desc: "dtype determines the underlying numeric data type stored in the tensor.",
           code: `a = torch.tensor([1, 2, 3], dtype=torch.float32)
 b = torch.tensor([1, 2, 3], dtype=torch.int64)
 c = torch.tensor([True, False], dtype=torch.bool)
@@ -100,7 +112,10 @@ torch.int64 torch.float32 torch.int64`,
         },
         {
           num: 4, title: 'Device',
-          desc: 'Device tells you whether a tensor lives on the CPU or the GPU (CUDA). Models run 10-50x faster on GPU, so getting tensors onto the right device matters. `tensor.to("cuda")` moves it to GPU, `.to("cpu")` moves it back. Rule: the model and the data must be on the same device, or you get an error.',
+          why: "Deep learning matrix operations run 10x-50x faster on CUDA GPUs or Apple Silicon MPS than on standard CPUs.",
+          how: "Checked with torch.cuda.is_available() and moved between hardware with .to('cuda'), .to('mps'), or .to('cpu').",
+          solves: "Resolves CPU compute bottlenecks by moving tensor operations directly to GPU VRAM.",
+          desc: "Device specifies hardware placement (CPU, CUDA GPU, or MPS) for accelerated tensor math.",
           code: `device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using:", device)
 
@@ -117,7 +132,10 @@ cpu`,
         },
         {
           num: 5, title: 'Tensor operations',
-          desc: 'Mathematical and logical operations on tensors — addition, multiplication, matrix multiply, and more. Every neural-network calculation (forward pass, loss, gradients) is built from these. Element-wise ops (`+`, `*`) and matrix ops (`@`, `matmul`) are different things — and in-place operations (`add_`, `mul_`) save memory.',
+          why: "Mathematical operations (addition, element-wise multiplication, matrix multiplication @) are the core engine of forward and backward passes.",
+          how: "Executed via operators (+, *, @), functions like torch.matmul(), and in-place methods like .add_().",
+          solves: "Eliminates slow Python loops by executing vectorized parallel SIMD/GPU tensor math.",
+          desc: "Vectorized arithmetic and matrix multiplications executing efficiently on GPU hardware.",
           code: `a = torch.tensor([[1., 2.], [3., 4.]])
 b = torch.tensor([[5., 6.], [7., 8.]])
 
@@ -145,7 +163,10 @@ tensor(3)`,
       cards: [
         {
           num: 6, title: 'requires_grad',
-          desc: '`requires_grad=True` is a flag telling PyTorch to track gradients for this tensor. You only need gradients for a model\'s parameters (weights & biases) — not for input data. It defaults to `False`; you can flip it on later with `tensor.requires_grad_(True)`. This avoids wasting memory and computation on tensors that don\'t need it.',
+          why: "PyTorch needs to know which tensors represent trainable parameters so it records operations for gradient backpropagation.",
+          how: "Set requires_grad=True on a tensor; PyTorch then starts tracking every operation involving that tensor in a computational graph.",
+          solves: "Eliminates manual derivative derivation and saves memory by only tracking gradients for trainable parameters.",
+          desc: "A flag that activates PyTorch Autograd gradient tracking for trainable tensors.",
           code: `import torch
 
 x = torch.tensor(3.0)
@@ -163,7 +184,10 @@ True`,
         },
         {
           num: 7, title: 'Computational graph',
-          desc: 'A directed graph PyTorch builds automatically as you run operations on tensors with `requires_grad=True` — nodes are tensors, edges are operations. Backpropagation (the chain rule) needs to know exactly which operation happened in what order, and this graph is how. It\'s built during the forward pass; `backward()` walks it in reverse.',
+          why: "Backpropagation requires traversing the exact chain rule of all mathematical operations performed from inputs to loss.",
+          how: "PyTorch dynamically builds a directed acyclic graph (DAG) of tensors and grad_fn nodes during the forward pass.",
+          solves: "Allows dynamic, conditional neural network architectures (Dynamic Graphs / define-by-run) unlike static graph engines.",
+          desc: "Dynamic DAG built on the fly during forward pass to enable reverse chain-rule differentiation.",
           code: `x = torch.tensor(3.0, requires_grad=True)
 
 y = x ** 2                  # Operation 1
@@ -175,7 +199,10 @@ print(z)                    # grad_fn=<SinBackward0>
         },
         {
           num: 8, title: 'backward()',
-          desc: '`backward()` walks the computational graph in reverse to calculate gradients — backpropagation. Usually called on a scalar tensor (loss). Every `requires_grad=True` tensor gets its `.grad` filled in. The graph is freed after one `backward()` call to save memory — pass `retain_graph=True` if you need to call it again.',
+          why: "Neural networks learn by computing the gradient of the scalar loss with respect to every trainable parameter using the chain rule.",
+          how: "Calling loss.backward() triggers reverse traversal from the loss node through the computational graph.",
+          solves: "Automates the entire backpropagation calculus in a single function call.",
+          desc: "Triggers automated reverse-mode autodiff across the computational graph.",
           code: `x = torch.tensor(3.0, requires_grad=True)
 
 y = x ** 2          # y = 9
@@ -188,7 +215,10 @@ print(x.grad)       # dz/dx = 2x * cos(x^2)`,
         },
         {
           num: 9, title: 'gradients (.grad)',
-          desc: 'The `.grad` attribute holds the gradient computed by `backward()` — how much the loss would change with respect to that parameter. Gradient descent needs this to update weights. Gradients accumulate across calls, which is why you must `zero_grad()` / `.grad.zero_()` before every step.',
+          why: "Optimizers need the exact gradient vectors to adjust weights in the direction that minimizes loss.",
+          how: "After backward(), partial derivative values are stored in the .grad attribute of each tensor with requires_grad=True.",
+          solves: "Provides the numerical step values needed for gradient descent and allows manual gradient inspection and clipping.",
+          desc: "The attribute containing computed partial derivatives after backward().",
           code: `w = torch.tensor(2.0, requires_grad=True)
 b = torch.tensor(1.0, requires_grad=True)
 
@@ -213,7 +243,10 @@ tensor(14.)`,
       cards: [
         {
           num: 10, title: 'Forward pass',
-          desc: "The forward pass runs input data through the model's current weights to produce a prediction. For a single neuron, that's simply `y_pred = w * x + b` (plus an optional activation). That prediction is what the loss gets computed against next.",
+          why: "Computes model predictions by propagating input data through weight matrices and activation functions.",
+          how: "Multiply input x by weight w, add bias b (x @ w + b), and pass through an activation function like Sigmoid/ReLU.",
+          solves: "Transforms raw feature vectors into meaningful output predictions and logits.",
+          desc: "Propagates input data through linear transformations and activations to generate predictions.",
           code: `w = torch.tensor(0.5, requires_grad=True)
 b = torch.tensor(0.1, requires_grad=True)
 x = torch.tensor(2.0)
@@ -226,7 +259,10 @@ print("Prediction:", y_pred)`,
         },
         {
           num: 11, title: 'Loss',
-          desc: "Loss measures how far a prediction is from the target — the bigger the loss, the worse the model is doing right now. Training's whole job is minimizing it. MSE for regression, BCE for binary classification, Cross Entropy for multi-class are the common choices.",
+          why: "Quantifies the magnitude of error between model predictions and actual ground truth targets.",
+          how: "Calculates mathematical distance using functions like Mean Squared Error (MSE) for regression or Cross-Entropy for classification.",
+          solves: "Converts model mistakes into a single differentiable scalar penalty that guides optimization.",
+          desc: "Scalar metric quantifying discrepancy between model predictions and ground-truth targets.",
           code: `y_true = torch.tensor(1.0)
 y_pred = torch.tensor(0.8)
 loss = (y_pred - y_true) ** 2
@@ -240,7 +276,10 @@ Built-in MSE: 0.04000000283122063`,
         },
         {
           num: 12, title: 'Backward',
-          desc: 'Calling `loss.backward()` computes gradients through Autograd — every weight and bias gets its own gradient, so it can be nudged in the right direction. This replaces manually applying the chain rule by hand.',
+          why: "Propagates the computed loss penalty backward through every layer to determine parameter blame.",
+          how: "Executing loss.backward() calculates partial derivatives d(loss)/d(w) and stores them in w.grad.",
+          solves: "Calculates exact error gradients for all layers simultaneously without manual math.",
+          desc: "Backpropagates loss gradients through the manual network graph.",
           code: `w = torch.tensor(0.5, requires_grad=True)
 b = torch.tensor(0.1, requires_grad=True)
 x = torch.tensor(2.0)
@@ -258,7 +297,10 @@ b.grad: tensor(0.2000)`,
         },
         {
           num: 13, title: 'Weight update',
-          desc: "Update weights and biases using their gradients: `parameter = parameter - learning_rate * gradient`. This happens inside `torch.no_grad()` (no tracking needed for the update itself), and gradients must be zeroed right after — otherwise next step's gradients accumulate onto the old ones.",
+          why: "Gradients only indicate slope; weights must be nudged in the negative gradient direction to reduce error.",
+          how: "Wrapped in with torch.no_grad():, subtract learning rate * gradient (w -= lr * w.grad), then clear gradients with w.grad.zero_().",
+          solves: "Decreases model loss iteratively while preventing gradient accumulation leaks across training steps.",
+          desc: "Updates parameter tensors along the negative gradient vector and resets .grad.",
           code: `lr = 0.01
 
 with torch.no_grad():
@@ -275,7 +317,10 @@ Updated b: tensor(0.0980, requires_grad=True)`,
         },
         {
           num: 14, title: 'Complete manual training',
-          desc: "Forward → Loss → Backward → Update, repeated — that's training. One pass never makes a model perfect; it takes many epochs of shrinking the loss. The example below learns `y = 2x + 1`, and after 100 epochs w and b converge close to those exact values.",
+          why: "Demonstrates the foundational mechanics of deep learning before abstracting them into high-level PyTorch modules.",
+          how: "Loops through forward pass -> loss calculation -> backward pass -> weight update -> zero gradients over multiple epochs.",
+          solves: "Bridges the conceptual gap between pure calculus/linear algebra and practical deep learning code.",
+          desc: "The complete training loop implemented from scratch with raw tensors and manual steps.",
           code: `X = torch.tensor([[1.0], [2.0], [3.0], [4.0], [5.0]])
 y = torch.tensor([[3.0], [5.0], [7.0], [9.0], [11.0]])
 
@@ -311,7 +356,10 @@ Epoch 100 | Loss: 0.0036 | w: 1.9928 | b: 0.9899`,
       cards: [
         {
           num: 15, title: 'nn.Module',
-          desc: "`nn.Module` is PyTorch's base class — you inherit from it to build your own network. Managing weights by hand doesn't scale; `nn.Module` tracks parameters automatically, makes moving to GPU trivial, and keeps code organized. Define layers in `__init__`, describe the data flow in `forward()`.",
+          why: "Building complex architectures manually is error-prone; nn.Module provides clean organization, parameter tracking, and GPU migration.",
+          how: "Subclass nn.Module, define layers in __init__(), and write the computational flow in forward(x).",
+          solves: "Automatically tracks all sub-layer weights, enables .to(device) transfers, and manages training/eval modes.",
+          desc: "Base class for all neural network modules in PyTorch, managing parameters and submodules.",
           code: `import torch.nn as nn
 
 class MyNetwork(nn.Module):
@@ -330,7 +378,10 @@ print(model)`,
         },
         {
           num: 16, title: 'nn.Linear',
-          desc: '`nn.Linear` is a fully connected (dense) layer that computes `y = x @ W.T + b`. Give it `in_features` and `out_features` and it creates weights and bias for you automatically (with `requires_grad=True`) — no manual weight init or matrix multiplication needed.',
+          why: "Dense fully-connected layers (y = xA^T + b) are the most common building block for combining learned features.",
+          how: "Initialize with nn.Linear(in_features, out_features). PyTorch handles weight matrix and bias initialization automatically.",
+          solves: "Eliminates manual weight matrix allocation, shape sizing, and Xavier/Kaiming initialization boilerplate.",
+          desc: "Applies a linear transformation to incoming data with learnable weights and biases.",
           code: `layer = nn.Linear(in_features=3, out_features=1)
 
 x = torch.randn(5, 3)          # batch_size=5, features=3
@@ -345,7 +396,10 @@ torch.Size([1])`,
         },
         {
           num: 17, title: 'Activation',
-          desc: "Activation functions introduce non-linearity — without them a network is just a chain of linear combinations, and real-world problems aren't linear. ReLU is the most common choice for hidden layers, Sigmoid for binary output, Softmax for multi-class output.",
+          why: "Linear layers stacked together only compute linear transformations; activations introduce non-linearity to learn complex patterns.",
+          how: "Applied between layers using functions like nn.ReLU(), nn.Sigmoid(), or nn.GELU().",
+          solves: "Solves the linear representation collapse problem, allowing neural networks to act as universal function approximators.",
+          desc: "Non-linear transformation functions enabling networks to model complex decision boundaries.",
           code: `class Network(nn.Module):
     def __init__(self):
         super().__init__()
@@ -366,7 +420,10 @@ print(out.shape)`,
         },
         {
           num: 18, title: 'Optimizer',
-          desc: "An optimizer is the smart way to update weights — it takes gradients and improves parameters, with extras like momentum and adaptive learning rates. Writing `w = w - lr * w.grad` by hand everywhere isn't practical; `Adam` is the most commonly used optimizer.",
+          why: "Basic gradient descent converges slowly and gets stuck in local minima; advanced optimizers provide momentum and adaptive learning rates.",
+          how: "Initialize torch.optim.Adam(model.parameters(), lr=0.001) and call opt.step() alongside opt.zero_grad().",
+          solves: "Speeds up training convergence and automates per-parameter learning rate tuning (Adam, RMSprop, SGD).",
+          desc: "Automated parameter optimization algorithms implementing SGD, Adam, and momentum updates.",
           code: `model = MyNetwork()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
@@ -383,7 +440,10 @@ Parameter Group 0
         },
         {
           num: 19, title: 'Training loop',
-          desc: 'Model + loss + optimizer + data all working together — forward, backward, update, repeated over the dataset, so the model can learn. Standard shape: `model.train()`, then per batch: forward, `optimizer.zero_grad()`, `loss.backward()`, `optimizer.step()`.',
+          why: "Connects all deep learning components (model, data, loss, optimizer) into a systematic training pipeline.",
+          how: "Iterates through epochs: pred = model(x), loss = crit(pred, y), opt.zero_grad(), loss.backward(), opt.step().",
+          solves: "Provides the standard 5-step blueprint used across almost all PyTorch supervised learning pipelines.",
+          desc: "Standard 5-step loop orchestrating forward pass, loss calculation, backpropagation, and weight stepping.",
           code: `import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -419,7 +479,10 @@ Epoch 5 | Loss: 0.9782`,
       cards: [
         {
           num: 20, title: 'Dataset',
-          desc: '`Dataset` is an abstract class representing your data: how many samples there are (`__len__`) and how to get one by index (`__getitem__`). It exists to make raw data — images, CSVs, text — compatible with the training loop.',
+          why: "Large datasets cannot fit in memory simultaneously and raw formats (images, CSV, audio) need structured sample-by-sample retrieval.",
+          how: "Subclass torch.utils.data.Dataset and implement __len__() and __getitem__(index).",
+          solves: "Decouples dataset storage and preprocessing logic from model training code.",
+          desc: "Abstract interface representing a map-style or iterable dataset.",
           code: `from torch.utils.data import Dataset
 
 class MyDataset(Dataset):
@@ -443,7 +506,10 @@ print(dataset[0])`,
         },
         {
           num: 21, title: 'DataLoader',
-          desc: '`DataLoader` wraps a Dataset and provides batching, shuffling, and parallel loading. You can\'t load an entire dataset into memory at once, so DataLoader efficiently streams it in small batches — making training faster, more memory-efficient, and convenient.',
+          why: "Feeding individual samples sequentially to a GPU is slow and causes training instability; models need batched, shuffled, parallel loading.",
+          how: "Wrap a Dataset in DataLoader(dataset, batch_size=32, shuffle=True, num_workers=2).",
+          solves: "Eliminates I/O bottlenecks with multi-process background loading and automated batch creation.",
+          desc: "Provides batching, shuffling, and multi-process background data streaming.",
           code: `from torch.utils.data import DataLoader
 
 train_loader = DataLoader(
@@ -460,7 +526,10 @@ for batch_X, batch_y in train_loader:
         },
         {
           num: 22, title: 'Batch',
-          desc: 'A batch is a group of samples from the Dataset the model processes together at once. Gradient descent over the full dataset is slow and memory-heavy, a single sample (SGD) is noisy — a batch is the sweet spot between speed and stability.',
+          why: "Computing gradients on the entire dataset at once exhausts VRAM, while single-sample SGD is noisy.",
+          how: "Slices data into mini-batches (e.g. 32 or 64 samples) processed together as a single tensor with leading dimension [B, ...].",
+          solves: "Balances gradient stability with GPU VRAM limits and hardware parallelization efficiency.",
+          desc: "Groups multiple data samples together for parallel tensor computation.",
           code: `loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 for batch_X, batch_y in loader:
@@ -472,7 +541,10 @@ for batch_X, batch_y in loader:
         },
         {
           num: 23, title: 'Sampler',
-          desc: "A Sampler decides in what order samples get pulled from the Dataset — random, sequential, or weighted (for class imbalance). You pass it to the DataLoader as `sampler=`; when you use one, `shuffle` must stay `False`.",
+          why: "Real-world datasets often have severe class imbalance, requiring custom sampling strategies instead of uniform random selection.",
+          how: "Pass a WeightedRandomSampler or SubsetRandomSampler to the DataLoader's sampler= argument.",
+          solves: "Prevents models from ignoring minority classes in skewed datasets (e.g. medical diagnosis, fraud detection).",
+          desc: "Controls the sequence and distribution of indices used to draw samples from a Dataset.",
           code: `from torch.utils.data import RandomSampler, WeightedRandomSampler
 
 sampler = RandomSampler(dataset)
@@ -486,7 +558,10 @@ print("wired up")`,
         },
         {
           num: 24, title: 'collate_fn',
-          desc: '`collate_fn` is a function that describes how individual samples get combined into a batch. The default collate works fine for plain tensors, but variable-length sequences (text, audio) or custom data structures need their own logic.',
+          why: "Variable-length inputs (text sentences of different lengths, audio clips) cannot be stacked directly into fixed-shape batch tensors.",
+          how: "Pass a custom function to collate_fn= that pads sequences with zeros to matching lengths within each mini-batch.",
+          solves: "Solves shape dimension mismatches when assembling ragged, heterogeneous data into uniform tensors.",
+          desc: "Custom batch merger function that merges a list of samples into mini-batch tensors with padding.",
           code: `from torch.nn.utils.rnn import pad_sequence
 
 def my_collate(batch):
@@ -506,7 +581,10 @@ loader = DataLoader(dataset, batch_size=8, collate_fn=my_collate)`,
       cards: [
         {
           num: 25, title: 'Fashion MNIST',
-          desc: "Fashion MNIST is an image-classification dataset — 70,000 grayscale 28x28 images across 10 categories (T-shirt, Trouser, Sneaker...). It's a step up from digit-MNIST, which makes it a good real first project: 60,000 training images, 10,000 test images.",
+          why: "Real-world vision benchmarking requires non-trivial 2D pixel data that is richer than digits while remaining lightweight for prototyping.",
+          how: "Loaded via torchvision.datasets.FashionMNIST(root='./data', train=True, download=True, transform=ToTensor()).",
+          solves: "Provides an accessible, standardized computer vision benchmark with 10 clothing categories of 28x28 grayscale images.",
+          desc: "Standard vision benchmark dataset containing 70,000 grayscale clothing images across 10 classes.",
           code: `from torchvision import datasets, transforms
 
 transform = transforms.Compose([transforms.ToTensor()])
@@ -521,7 +599,10 @@ torch.Size([1, 28, 28])`,
         },
         {
           num: 26, title: 'ANN',
-          desc: 'An Artificial Neural Network (fully connected) is input → hidden layers → output. It\'s the first simple architecture for classifying images, a good way to learn the basics before CNNs. Input 784 (28x28 flattened), hidden 128 → 64 with ReLU, output 10 neurons — one per class.',
+          why: "Serves as the baseline neural architecture to classify flattened spatial feature vectors into discrete probability distributions.",
+          how: "Flattens 28x28 inputs to 784 features, passes them through Linear -> ReLU -> Linear hidden layers to 10 class logits.",
+          solves: "Solves multi-class classification on tabular and flattened spatial data.",
+          desc: "Artificial Neural Network architecture using fully connected layers for multi-class classification.",
           code: `import torch.nn as nn
 
 class FashionANN(nn.Module):
@@ -554,7 +635,10 @@ print(model)`,
         },
         {
           num: 27, title: 'Train',
-          desc: "Showing the model data and updating weights — one full epoch means forward → loss → backward → update across the whole training set. The model only learns from being shown examples over and over, improving with each mistake.",
+          why: "Neural networks require thousands of iterative weight updates over the training set to minimize prediction error.",
+          how: "Set model.train(), iterate through training DataLoader batches, compute cross-entropy loss, backpropagate, and update weights.",
+          solves: "Drives down training loss and fits model weights to the training data distribution.",
+          desc: "Iterative training loop execution over the dataset to optimize network parameters.",
           code: `import torch.optim as optim
 from torch.utils.data import DataLoader
 
@@ -582,7 +666,10 @@ Epoch [5/5] | Loss: 0.2918`,
         },
         {
           num: 28, title: 'Validation',
-          desc: "During training, a separate validation set checks the model's performance on data it wasn't trained on — this is how overfitting shows up. Training loss alone won't tell you if the model generalizes; usually 10-20% of the training set is held out for this.",
+          why: "Measuring performance solely on training data hides overfitting; validation checks generalization to unseen samples during training.",
+          how: "Set model.eval() and with torch.no_grad():, calculate validation loss and metric accuracy across validation batches.",
+          solves: "Detects overfitting early and helps select the best model checkpoint before test evaluation.",
+          desc: "Evaluates model generalization on held-out validation data during training.",
           code: `from torch.utils.data import random_split
 
 train_size = int(0.8 * len(train_dataset))
@@ -604,7 +691,10 @@ print(f"Validation Loss: {val_loss/len(val_loader):.4f}")`,
         },
         {
           num: 29, title: 'Test',
-          desc: "The final evaluation, on a completely unseen test set, done after training. Validation is for tuning hyperparameters; the test set gives the honest final performance number. Use `model.eval()` + `torch.no_grad()` to get predictions.",
+          why: "Hyperparameter tuning on the validation set can introduce subtle selection bias; a final untouched test set provides honest evaluation.",
+          how: "Run single-pass inference over the test DataLoader with model.eval() and torch.no_grad() to compute unbiased final metrics.",
+          solves: "Prevents overestimating real-world production performance caused by data leakage or validation overfitting.",
+          desc: "Final unbiased evaluation on completely held-out test data after training and tuning.",
           code: `test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
 
 model.eval()
@@ -620,7 +710,10 @@ print(f"Test Loss: {test_loss/len(test_loader):.4f}")`,
         },
         {
           num: 30, title: 'Accuracy',
-          desc: 'Accuracy = correctly predicted samples / total samples x 100 — a direct, easy-to-read classification measure alongside loss. Predicted class comes from `torch.argmax(outputs, dim=1)`, then you compare predictions against actual labels.',
+          why: "Raw loss values (e.g. 0.342) are abstract; stakeholders need human-interpretable percentage scores of correct predictions.",
+          how: "Calculate (predictions.argmax(dim=1) == labels).float().mean().item() * 100.",
+          solves: "Converts class logits into percentage metric (% correctly classified) for easy evaluation.",
+          desc: "Calculates the percentage of correct class predictions out of total samples.",
           code: `def calculate_accuracy(loader, model):
     model.eval()
     correct = 0
@@ -645,7 +738,10 @@ Test Accuracy : 87.02%`,
       cards: [
         {
           num: 31, title: 'CUDA',
-          desc: "CUDA is NVIDIA's technology for using a GPU for general-purpose computing. Deep learning runs millions of calculations — a CPU works sequentially, a GPU works in parallel across thousands of cores, which is where the 10-50x training speedup comes from.",
+          why: "Deep learning involves massive parallel matrix multiplications; NVIDIA CUDA hardware executes thousands of threads concurrently.",
+          how: "PyTorch interfaces with NVIDIA CUDA drivers via torch.cuda to allocate tensors directly in GPU VRAM.",
+          solves: "Eliminates multi-day CPU training times by accelerating matrix math up to 50x-100x.",
+          desc: "NVIDIA's parallel computing platform integrated directly into PyTorch.",
           code: `import torch
 
 print(torch.cuda.is_available())     # True / False
@@ -657,14 +753,20 @@ None`,
         },
         {
           num: 32, title: 'device',
-          desc: 'A `device` object tells a tensor or model which hardware it should run on — CPU or GPU. Wrapping it in a variable keeps the same code working whether or not a GPU is present, instead of hardcoding "cuda" and breaking when there isn\'t one.',
+          why: "Hardcoding 'cuda' breaks scripts on machines without dedicated GPUs or on Apple Silicon MPS hardware.",
+          how: "Dynamically define device = torch.device('cuda' if torch.cuda.is_available() else 'cpu').",
+          solves: "Ensures robust, portable code that runs seamlessly across local laptops, Colab, and cloud GPU clusters.",
+          desc: "Dynamic hardware device abstraction (CPU, CUDA, MPS) ensuring code portability.",
           code: `device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)`,
           output: `cpu`,
         },
         {
           num: 33, title: 'model.to(device)',
-          desc: "Moves all of a model's parameters (weights & biases) onto the target device. Until the model is on GPU, you get none of the speed benefit. Note: any new tensor you create afterward still defaults to CPU — you have to move data too.",
+          why: "Neural network parameter weights default to CPU memory; they must be transferred to GPU VRAM before GPU computation.",
+          how: "Invoke model.to(device) once before entering the training or inference loop.",
+          solves: "Recursively moves all model weights, biases, and registered buffers to the target acceleration device.",
+          desc: "Recursively casts and transfers all model parameters and buffers to the specified device.",
           code: `model = FashionANN()
 model = model.to(device)
 
@@ -673,7 +775,10 @@ print(next(model.parameters()).device)`,
         },
         {
           num: 34, title: 'batch.to(device)',
-          desc: 'Moving each batch\'s images and labels onto the same device as the model. PyTorch\'s rule: model and data must be on the same device, or you get "Expected all tensors to be on the same device". Move each batch inside the training loop.',
+          why: "PyTorch raises runtime errors if a model is on GPU but the input batch tensor is still on CPU.",
+          how: "Inside the batch loop, move data: images = images.to(device), labels = labels.to(device).",
+          solves: "Eliminates 'Expected all tensors to be on the same device' runtime crashes.",
+          desc: "Transfers mini-batch input and label tensors to the active hardware device.",
           code: `for images, labels in train_loader:
     images = images.to(device)
     labels = labels.to(device)
@@ -686,7 +791,10 @@ print(images.device, labels.device)`,
         },
         {
           num: 35, title: 'GPU training',
-          desc: 'Running the whole training process on GPU — model and data both. Three steps: define the device, move the model, move every batch. Even a small dataset like Fashion MNIST shows a difference; large datasets make GPU nearly mandatory.',
+          why: "Combines device allocation, parallel mini-batch streaming, and CUDA kernels for end-to-end acceleration.",
+          how: "Set device -> model.to(device) -> batch.to(device) -> forward/loss/backward on GPU.",
+          solves: "Maximizes compute throughput and fully saturates GPU tensor cores during training.",
+          desc: "Complete training workflow executing seamlessly on accelerated GPU hardware.",
           code: `device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = FashionANN().to(device)
 criterion = nn.CrossEntropyLoss()
@@ -717,7 +825,10 @@ Epoch [5/5] | Loss: 0.2918`,
       cards: [
         {
           num: 36, title: 'Overfitting',
-          desc: "Overfitting is when a model learns the training data too well — including its noise — so it does great on training data but poorly on unseen validation/test data. Symptom: training loss keeps dropping while validation loss starts climbing. Cause: too much model complexity, too little regularization, or too many epochs.",
+          why: "Deep neural networks easily memorize training samples rather than learning underlying generalizable patterns.",
+          how: "Diagnosed when training loss continues decreasing while validation loss begins climbing upward.",
+          solves: "Identifies generalization failure before deploying unreliable models to production.",
+          desc: "Phenomenon where a model memorizes training data but fails to generalize to unseen samples.",
           code: `# Symptom pattern to watch for while training:
 # epoch 1: train_loss=0.90  val_loss=0.88
 # epoch 5: train_loss=0.40  val_loss=0.45
@@ -726,7 +837,10 @@ Epoch [5/5] | Loss: 0.2918`,
         },
         {
           num: 37, title: 'Dropout',
-          desc: "A regularization technique that randomly zeroes out a fraction of a layer's outputs during training (commonly 50% for hidden layers). It stops neurons from over-relying on each other and forces the network to learn more robust features — effectively training an ensemble of smaller subnetworks.",
+          why: "Co-adaptation of neurons causes overfitting; dropping random neuron activations forces redundant feature representations.",
+          how: "Insert nn.Dropout(p=0.5) between dense layers; active during .train() and automatically bypassed during .eval().",
+          solves: "Regularizes deep models and prevents reliance on specific individual neurons.",
+          desc: "Regularization technique randomly zeroing elements with probability p during training.",
           code: `import torch.nn as nn
 
 model = nn.Sequential(
@@ -745,7 +859,10 @@ print(model)`,
         },
         {
           num: 38, title: 'Weight Decay',
-          desc: 'A regularization technique that penalizes large weights by adding a term proportional to their squared magnitude (L2) to the loss. Optimizers implement it as a kind of multiplicative decay on the weights. Typical values for lambda range from 1e-5 to 1e-2.',
+          why: "Large weight magnitudes cause sharp decision boundaries and vulnerability to input noise.",
+          how: "Pass weight_decay=1e-4 (L2 regularization) directly to the optimizer: torch.optim.Adam(..., weight_decay=1e-4).",
+          solves: "Penalizes oversized weights, leading to smoother decision boundaries and better generalization.",
+          desc: "L2 regularization term added to the loss function to penalize large weight parameters.",
           code: `optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
 print(optimizer)`,
           output: `AdamW (
@@ -757,7 +874,10 @@ Parameter Group 0
         },
         {
           num: 39, title: 'Early Stopping',
-          desc: 'A simple, effective regularizer: monitor a validation metric (usually loss), and stop training once it hasn\'t improved for `patience` epochs. Save the best epoch\'s model so you can restore it afterward.',
+          why: "Training for a fixed number of epochs often leads to overfitting in later epochs and wastes compute.",
+          how: "Track validation loss per epoch; if it fails to improve for N consecutive epochs (patience), stop training and restore the best weights.",
+          solves: "Eliminates wasted GPU hours and automatically captures the optimal checkpoint.",
+          desc: "Halts training when validation loss ceases to improve, saving compute and preventing overfitting.",
           code: `best_val_loss = float('inf')
 patience = 10
 counter = 0
@@ -778,7 +898,10 @@ for epoch in range(50):
         },
         {
           num: 40, title: 'Transforms',
-          desc: 'Operations applied to input data (mostly images, sometimes text/audio) to prepare or augment it for the model. Preprocessing (Resize, Normalize, ToTensor) and augmentation (RandomHorizontalFlip, RandomRotation) get composed into a pipeline in torchvision.',
+          why: "Raw images come in diverse resolutions, color ranges, and file formats that models cannot directly process.",
+          how: "Chain transformations using torchvision.transforms.Compose([Resize((224,224)), ToTensor(), Normalize(mean, std)]).",
+          solves: "Standardizes input image dimensions, pixel value scales ([0, 1]), and channel normalization.",
+          desc: "Pipeline of deterministic preprocessing operations applied to input images.",
           code: `from torchvision import transforms
 
 train_transform = transforms.Compose([
@@ -800,7 +923,10 @@ print(train_transform)`,
         },
         {
           num: 41, title: 'Data Augmentation',
-          desc: 'Artificially growing a training set\'s size and diversity by applying random, realistic transformations to existing samples. This makes the model invariant to those variations, which reduces overfitting. Geometric (flips, rotations, crops), photometric (brightness/contrast), and advanced (MixUp, CutMix, AutoAugment) are the common categories.',
+          why: "Collecting more real-world labeled data is expensive; existing datasets must be synthetically enriched.",
+          how: "Apply random transforms like RandomHorizontalFlip(), RandomRotation(), and ColorJitter() on training images on-the-fly.",
+          solves: "Prevents spatial orientation bias and synthetically expands dataset diversity without extra storage.",
+          desc: "Generates synthetic training variations on the fly to improve model generalization.",
           code: `# example augmentation pipeline (vision)
 aug = transforms.Compose([
     transforms.RandomHorizontalFlip(p=0.5),
@@ -812,7 +938,10 @@ print("augmentation pipeline ready")`,
         },
         {
           num: 42, title: 'Optuna',
-          desc: 'Optuna is an automatic hyperparameter-optimization framework with a "define-by-run" API, so the search space is built dynamically. It can prune bad trials early and supports multi-objective optimization. Key concepts: a Study (an optimization session), a Trial (one evaluation with a specific hyperparameter set), and the objective function (takes a trial, returns a metric).',
+          why: "Manual hyperparameter guessing (learning rate, batch size, dropout rate) is inefficient and sub-optimal.",
+          how: "Define an objective function with trial.suggest_float() / trial.suggest_int() and call study.optimize(objective, n_trials=50).",
+          solves: "Automates Bayesian hyperparameter search with intelligent trial pruning, finding higher accuracy configurations faster.",
+          desc: "Automated hyperparameter optimization framework with Bayesian sampling and pruning.",
           code: `import optuna
 
 def objective(trial):
@@ -834,7 +963,10 @@ Best value: 9.123e-08`,
       cards: [
         {
           num: 43, title: 'Conv2d',
-          desc: "`nn.Conv2d` is a convolutional layer that slides filters (kernels) over an image to detect local patterns — edges, textures, shapes. Fully connected layers destroy an image's spatial structure; convolution preserves it, using far fewer parameters. Key args: `in_channels`, `out_channels`, `kernel_size`, `stride`, `padding`.",
+          why: "Dense layers discard 2D spatial pixel relationships and require too many parameters for images; convolutional kernels preserve local geometry.",
+          how: "Slide learnable 3x3 or 5x5 weight filters across the image using nn.Conv2d(in_channels, out_channels, kernel_size=3).",
+          solves: "Drastically reduces parameter count while learning translation-invariant spatial features (edges, textures, shapes).",
+          desc: "2D spatial convolution layer applying sliding learned filters over feature maps.",
           code: `import torch.nn as nn
 
 conv = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1)
@@ -847,7 +979,10 @@ print(out.shape)     # torch.Size([16, 32, 28, 28])`,
         },
         {
           num: 44, title: 'ReLU',
-          desc: 'ReLU (`nn.ReLU()`) zeroes out negative values and leaves positives untouched (`f(x) = max(0, x)`). Non-linearity after a convolution is essential, or the whole network collapses into something linear. It gives the network room to learn complex patterns and reduces vanishing gradients somewhat.',
+          why: "Linear convolution layers cannot separate non-linear visual concepts; ReLU introduces non-linearity by zeroing negative filter responses.",
+          how: "Apply f(x) = max(0, x) via nn.ReLU(inplace=True) after convolution operations.",
+          solves: "Eliminates the vanishing gradient problem found in Sigmoid/Tanh during deep convolutional network training.",
+          desc: "Rectified Linear Unit activation introducing non-linearity after convolution.",
           code: `relu = nn.ReLU()
 
 x = torch.tensor([-2.0, -0.5, 0.0, 1.5, 3.0])
@@ -856,7 +991,10 @@ print(relu(x))`,
         },
         {
           num: 45, title: 'Pooling',
-          desc: "Pooling shrinks a feature map (downsampling) while keeping the important information — less computation, less overfitting, and some translation invariance. MaxPool2d (take the window's max) is the common choice; a 2x2 window with stride 2 halves the size.",
+          why: "Successive convolution layers produce large feature maps that increase computation and cause sensitivity to exact pixel locations.",
+          how: "Downsample feature maps using nn.MaxPool2d(kernel_size=2, stride=2) to take the maximum activation in each 2x2 window.",
+          solves: "Cuts spatial dimensions in half, reduces computational cost, and provides translation invariance.",
+          desc: "Spatial downsampling layer extracting maximum activations across local grid windows.",
           code: `pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
 x = torch.randn(16, 32, 28, 28)
@@ -867,7 +1005,10 @@ print(out.shape)     # torch.Size([16, 32, 14, 14])`,
         },
         {
           num: 46, title: 'Feature maps',
-          desc: 'A feature map is what comes out of a convolution — each filter produces its own. Every filter detects a different pattern (edges, corners, textures...), and together they build a rich representation. Early layers learn simple features, deeper layers learn complex ones (eyes, wheels, faces).',
+          why: "Neural visual inspection requires verifying what specific visual patterns (edges, textures, object parts) each layer is detecting.",
+          how: "Extract intermediate tensor outputs from convolution layers and plot them as individual 2D grayscale/color channels.",
+          solves: "Opens the deep learning 'black box' by visualizing hierarchical representations inside CNNs.",
+          desc: "Intermediate 2D activation tensors output by convolutional layers.",
           code: `# Input:        (batch, 1, 28, 28)     -> original image
 # After Conv1:  (batch, 32, 28, 28)    -> 32 feature maps
 # After Pool1:  (batch, 32, 14, 14)
@@ -878,7 +1019,10 @@ print("shape progression noted above")`,
         },
         {
           num: 47, title: 'CNN training',
-          desc: 'Training a network built from Conv + ReLU + Pooling layers — noticeably better accuracy on images than an ANN, since spatial patterns are preserved. Typical shape: Conv → ReLU → MaxPool (repeated) → Flatten → Linear → ReLU → Dropout → Linear. Gets Fashion MNIST into the 90%+ range.',
+          why: "Assembles convolutional, activation, pooling, flattening, and linear layers into an end-to-end vision classifier.",
+          how: "Pass image tensors through Conv2d -> ReLU -> MaxPool2d blocks, flatten with torch.flatten(), and project through Linear layers.",
+          solves: "Solves high-accuracy image classification, object recognition, and visual pattern detection tasks.",
+          desc: "Complete convolutional neural network trained end-to-end for image classification.",
           code: `class FashionCNN(nn.Module):
     def __init__(self):
         super().__init__()
@@ -915,7 +1059,10 @@ print(model(x).shape)`,
       cards: [
         {
           num: 48, title: 'Pretrained model',
-          desc: 'A pretrained model has already been trained on a large dataset — ImageNet\'s 1.2 million images across 1000 classes, for example. Training from scratch needs far more data, time, and GPU power, and overfits easily on small datasets. `torchvision.models` ships ready-made ones: ResNet, VGG, EfficientNet, MobileNet.',
+          why: "Training massive vision models from scratch requires millions of labeled images and weeks of GPU cluster compute.",
+          how: "Download pre-trained architectures with proven weights: weights = ResNet18_Weights.DEFAULT; model = resnet18(weights=weights).",
+          solves: "Enables state-of-the-art accuracy on small custom datasets by transferring rich features learned on ImageNet (1.4M images).",
+          desc: "Pre-trained vision backbone pre-conditioned on massive benchmarks like ImageNet.",
           code: `from torchvision import models
 
 model = models.resnet18(weights="IMAGENET1K_V1")
@@ -926,7 +1073,10 @@ Linear(in_features=512, out_features=1000, bias=True)`,
         },
         {
           num: 49, title: 'Freeze',
-          desc: 'Freezing means stopping some layers\' parameters from training (`requires_grad = False`). Early layers learn generic features (edges, colors) that don\'t need re-learning. Freezing them cuts overfitting, speeds up training, and works well even with little data.',
+          why: "Pretrained feature extractors already know generic visual primitives; retraining them on a tiny dataset destroys these learned weights (catastrophic forgetting).",
+          how: "Loop through base parameters and set param.requires_grad = False.",
+          solves: "Accelerates training speed, cuts backpropagation memory, and preserves battle-tested feature extraction filters.",
+          desc: "Disables gradient updates on backbone parameters to preserve pre-learned representations.",
           code: `for param in model.parameters():
     param.requires_grad = False
 
@@ -936,7 +1086,10 @@ print("Trainable params:", trainable)`,
         },
         {
           num: 50, title: 'Replace classifier',
-          desc: 'Swapping out a pretrained model\'s final fully-connected layer for a new one matching your own classes. ImageNet has 1000 classes; your project might have 10 (Fashion MNIST) or fewer. Replace `fc` on a ResNet, or `classifier` on VGG/MobileNet.',
+          why: "Pretrained models are built for 1,000 ImageNet classes; custom tasks usually require a different number of output classes (e.g. 2 for cats vs dogs).",
+          how: "Replace the final linear head: num_ftrs = model.fc.in_features; model.fc = nn.Linear(num_ftrs, num_classes).",
+          solves: "Adapts generic deep vision models to specific target classification domains.",
+          desc: "Replaces the terminal fully connected layer to match custom class counts.",
           code: `import torch.nn as nn
 
 num_features = model.fc.in_features
@@ -947,7 +1100,10 @@ print(model.fc)`,
         },
         {
           num: 51, title: 'Fine-tuning',
-          desc: "Training some (or all) of a pretrained model's layers a bit further on your own data. Replacing the classifier alone (feature extraction) isn't always enough — fine-tuning lets the model also pick up your data's specific patterns. Common approach: unfreeze the last few blocks plus the classifier, and use a very small learning rate.",
+          why: "While frozen base features work well, unfreezing top layers and training with a very small learning rate adapts domain-specific nuances.",
+          how: "Unfreeze select top layers (param.requires_grad = True) and train with a tiny learning rate (e.g., 1e-5).",
+          solves: "Maximizes accuracy on specialized datasets (medical imaging, satellite scans) beyond standard generic features.",
+          desc: "Selectively unfreezes deep backbone layers for subtle gradient fine-tuning.",
           code: `for param in model.layer4.parameters():
     param.requires_grad = True
 
@@ -964,7 +1120,10 @@ print(sum(p.requires_grad for p in model.parameters()), "params are now trainabl
       cards: [
         {
           num: 52, title: 'Embedding',
-          desc: 'Embedding converts words (or tokens) into dense continuous vectors — each word becomes a fixed-size vector that captures its meaning. One-hot encoding is too sparse; `nn.Embedding` is a lookup table learned during training. Words with similar meaning end up close together in that space.',
+          why: "Categorical integer token IDs lack semantic relationships and one-hot vectors are sparse and memory-inefficient.",
+          how: "Map integer token IDs to dense, learnable continuous vectors via nn.Embedding(num_embeddings, embedding_dim).",
+          solves: "Compresses sparse vocabularies into dense geometric representations where similar words have close vector distances.",
+          desc: "Lookup table storing dense vector embeddings of fixed vocabulary size.",
           code: `embedding = nn.Embedding(num_embeddings=10000, embedding_dim=100)
 
 input_indices = torch.tensor([[1, 45, 23, 87, 3],
@@ -976,7 +1135,10 @@ print(output.shape)`,
         },
         {
           num: 53, title: 'RNN',
-          desc: "A network built to handle sequence data (text, time series) — it keeps a hidden state carrying forward previous information. A plain network treats each input independently, but order matters in text. At every time step, current input + previous hidden state produce a new hidden state and output. Limitation: vanishing gradients on long sequences.",
+          why: "Standard feedforward networks cannot handle sequential order, temporal dependencies, or variable-length text/time-series data.",
+          how: "Pass token vectors through nn.RNN(input_size, hidden_size, batch_first=True) which maintains an evolving hidden state vector h_t.",
+          solves: "Enables sequence processing and temporal memory across ordered sequential inputs.",
+          desc: "Recurrent neural network updating a hidden state vector at each sequence step.",
           code: `rnn = nn.RNN(input_size=100, hidden_size=64, num_layers=1, batch_first=True)
 
 x = torch.randn(2, 5, 100)
@@ -989,7 +1151,10 @@ torch.Size([1, 2, 64])`,
         },
         {
           num: 54, title: 'LSTM',
-          desc: "An advanced RNN using gates (Forget, Input, Output) to remember long-term dependencies much better. Plain RNNs fail on long sequences; LSTM largely solves the vanishing-gradient problem. The Forget gate drops old info, the Input gate takes in new info, the Output gate passes it along.",
+          why: "Standard RNNs suffer from vanishing gradients across long sequences, forgetting information from earlier steps.",
+          how: "Uses a cell state c_t governed by input, forget, and output gates via nn.LSTM(input_size, hidden_size, batch_first=True).",
+          solves: "Solves the vanishing gradient problem and retains long-term context across hundreds of sequence steps.",
+          desc: "Long Short-Term Memory network utilizing gated cell states to maintain long-range memory.",
           code: `lstm = nn.LSTM(input_size=100, hidden_size=64, num_layers=2,
                batch_first=True, dropout=0.2)
 
@@ -1005,7 +1170,10 @@ torch.Size([2, 2, 64])`,
         },
         {
           num: 55, title: 'GRU',
-          desc: "A simplified LSTM — just 2 gates (Reset + Update), a bit lighter and faster. LSTM is powerful but heavy; GRU gets nearly the same performance with fewer parameters. The Reset gate decides how much old info to ignore, the Update gate decides how much new info to add.",
+          why: "LSTMs have high parameter overhead with separate cell states and 3 gates; a lighter alternative is needed for faster training.",
+          how: "Combines forget and input gates into update and reset gates via nn.GRU(input_size, hidden_size, batch_first=True).",
+          solves: "Delivers LSTM-level sequence modeling performance with fewer parameters and faster execution.",
+          desc: "Gated Recurrent Unit streamlining LSTM gating into reset and update mechanisms.",
           code: `gru = nn.GRU(input_size=100, hidden_size=64, num_layers=1, batch_first=True)
 
 x = torch.randn(2, 8, 100)
@@ -1018,7 +1186,10 @@ torch.Size([1, 2, 64])`,
         },
         {
           num: 56, title: 'Sequence classification',
-          desc: 'Predicting a single label for an entire sequence — sentiment analysis, spam detection, emotion classification. Pipeline: Text → Embedding → RNN/LSTM/GRU → last hidden state → Fully Connected → Class. The goal is the overall meaning of the text, not any single word.',
+          why: "Natural language processing tasks (sentiment analysis, spam detection) require mapping full text sequences to class probabilities.",
+          how: "Pass token embeddings through an RNN/LSTM, extract the final hidden state h_n[-1], and feed it into a linear classifier.",
+          solves: "Maps variable-length text sequences to fixed-dimension classification logits.",
+          desc: "Maps arbitrary-length sequential input to categorical classification predictions.",
           code: `class SentimentClassifier(nn.Module):
     def __init__(self, vocab_size, embed_dim, hidden_dim, num_classes):
         super().__init__()
@@ -1039,7 +1210,10 @@ print(model(x).shape)`,
         },
         {
           num: 57, title: 'QA',
-          desc: "A question-answering system takes a context (paragraph) plus a question and predicts an answer — the basis of chatbots, search, and document QA. Simple version: encode context and question separately (shared embedding + LSTM), combine both representations, predict an answer. Modern QA (BERT, RoBERTa) uses contextual embeddings for much stronger results.",
+          why: "Extractive question answering requires predicting the exact start and end token indices of the answer span within a context passage.",
+          how: "Encode context and question tokens through a sequence model and predict start and end logit distributions over token positions.",
+          solves: "Solves span-based document comprehension and question-answering tasks.",
+          desc: "Predicts start and end token boundary logits to extract answer spans from text.",
           code: `class SimpleQA(nn.Module):
     def __init__(self, vocab_size, embed_dim, hidden_dim, num_answers):
         super().__init__()
@@ -1070,7 +1244,10 @@ print(model(ctx, q).shape)`,
       cards: [
         {
           num: 58, title: 'Save model',
-          desc: "Saving a trained model's weights to disk so you don't have to retrain — training takes real time, and you don't want to do it twice. Saving the `state_dict` (weights only) is best practice; you can also save the whole model (architecture + weights).",
+          why: "Training takes hours or days; learned weights must be serialized to disk for evaluation, deployment, or resuming training.",
+          how: "Save the lightweight parameter dictionary: torch.save(model.state_dict(), 'model.pth').",
+          solves: "Persists trained model weights portably without pickling Python code or architecture class definitions.",
+          desc: "Serializes model weights and parameter tensors to disk.",
           code: `torch.save(model.state_dict(), "fashion_mnist_model.pth")
 
 torch.save({
@@ -1082,7 +1259,10 @@ print("saved")`,
         },
         {
           num: 59, title: 'Load model',
-          desc: 'Loading saved weights back into a model — for inference, fine-tuning, or resuming training. Create the architecture first, then load the weights. When loading across devices, always pass `map_location=device`.',
+          why: "Production servers and inference pipelines need to restore saved weights into an instantiated architecture instantly.",
+          how: "Instantiate the model class and load weights: model.load_state_dict(torch.load('model.pth', weights_only=True)).",
+          solves: "Restores trained model state into memory ready for immediate inference or further training.",
+          desc: "Restores serialized parameter weights into an instantiated model architecture.",
           code: `model2 = FashionCNN()
 model2.load_state_dict(torch.load("fashion_mnist_model.pth", map_location="cpu"))
 model2.eval()
@@ -1091,7 +1271,10 @@ print("loaded, ready for inference")`,
         },
         {
           num: 60, title: 'Checkpoint',
-          desc: "Saving model + optimizer + epoch + loss partway through training, so an interruption doesn't cost the whole run — you can resume from there. It's also how you preserve the best model (lowest validation loss) seen so far.",
+          why: "Long training runs can crash due to hardware faults, power cuts, or spot-instance preemption; training must be resumable.",
+          how: "Save a dictionary containing epoch number, model state_dict, optimizer state_dict, and current loss score.",
+          solves: "Enables lossless resumption of interrupted training runs and tracks historical best milestones.",
+          desc: "Bundles model weights, optimizer states, epoch counters, and loss into a resumable archive.",
           code: `def save_checkpoint(model, optimizer, epoch, loss, path="checkpoint.pth"):
     torch.save({
         'epoch': epoch,
@@ -1111,7 +1294,10 @@ print("checkpoint helpers ready")`,
         },
         {
           num: 61, title: 'Inference',
-          desc: 'Getting a prediction from a trained model on new data — no training, just a forward pass. `model.eval()` puts Dropout/BatchNorm into evaluation mode, `torch.no_grad()` skips gradient tracking (faster, less memory) — this is how the model actually gets used.',
+          why: "Production predictions must be deterministic, fast, and memory-efficient without wasting resources tracking gradients.",
+          how: "Put the model in model.eval() and wrap prediction calls inside with torch.no_grad():.",
+          solves: "Disables Dropout/BatchNorm update behavior and reduces memory consumption by 50%+ during production serving.",
+          desc: "Executes forward-pass predictions in evaluation mode without Autograd tracking.",
           code: `def predict(model, image, device, class_names):
     model.eval()
     with torch.no_grad():
@@ -1128,7 +1314,10 @@ print("predict() ready")`,
         },
         {
           num: 62, title: 'Deployment basics',
-          desc: "Putting a model into a real application — web, mobile, API — so people can actually use it. FastAPI/Flask for a web API, TorchScript for a production-optimized export, ONNX for cross-platform, PyTorch Mobile for phones, Gradio/Streamlit for a quick demo.",
+          why: "Python PyTorch runtimes are heavy; production systems need exportable formats (TorchScript, ONNX) and lightweight REST APIs.",
+          how: "Trace or script the model via torch.jit.trace(model, example_input) and serve via FastAPI or C++ runtimes.",
+          solves: "Decouples model execution from Python, enabling fast inference in C++, mobile, and low-latency microservices.",
+          desc: "Exports PyTorch models via TorchScript/ONNX for standalone production deployment.",
           code: `# TorchScript export (production-ready)
 scripted_model = torch.jit.script(model)
 scripted_model.save("model_scripted.pt")
