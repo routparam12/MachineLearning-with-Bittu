@@ -1,4 +1,4 @@
-﻿/* en.ts — English dictionary for the Transformer section.
+/* en.ts — English dictionary for the Transformer section.
    SOURCE OF TRUTH for the `Dict` type: hi.ts must match this shape exactly.
 
    Every key the engine emits is namespaced (tag. / say. / panel. / work. / err.)
@@ -88,6 +88,7 @@ export const en = {
     legHigh: 'High value',
     legLow: 'Low value',
     masked: 'masked — a token cannot look ahead',
+    noscriptJsRequired: 'Interactive token visualization, attention weights, and residual stream inspection require JavaScript enabled in your browser.',
   },
 
   err: {

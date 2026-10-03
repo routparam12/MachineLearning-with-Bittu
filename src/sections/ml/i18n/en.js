@@ -13,10 +13,10 @@ export default {
   },
 
   toolbar: {
-    sfxOn: 'Sound effects on',
-    sfxOff: 'Mute sound effects',
-    musicOn: 'Play background music',
-    musicOff: 'Stop background music',
+    turnSfxOff: 'Turn sound off',
+    turnSfxOn: 'Turn sound on',
+    turnMusicOff: 'Turn music off',
+    turnMusicOn: 'Turn music on',
     themeLight: 'Switch to light theme',
     themeDark: 'Switch to dark theme',
   },

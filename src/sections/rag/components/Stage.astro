@@ -13,7 +13,6 @@ const num = index + 1;
 <section class="stage-sec" data-stage={index} id={`stage-${num}`}>
   <p class="stage-sec__eyebrow">
     {t.ui.stageOf(num, total)}
-    {stage.isNew && <span class="is-new"> {t.ui.newSince}</span>}
   </p>
   <h2>{stage.title}</h2>
 

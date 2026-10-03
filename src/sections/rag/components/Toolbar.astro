@@ -2,20 +2,21 @@
 /* Same fixed glass pill as every other section: language switch + sound,
    music and theme toggles. RAG only ever has one page per locale, so the
    language links are plain hrefs rather than a swapLang() helper. */
-const { locale } = Astro.props;
+const { locale, t } = Astro.props;
+const ui = t?.ui || {};
 ---
-<div class="toolbar" data-toolbar>
+<div class="toolbar" data-toolbar data-labels={JSON.stringify(ui)}>
   <div class="lang" role="group" aria-label="Language">
     <a href="/en/rag/" class="lang__opt" data-lang="en" aria-pressed={locale === 'en' ? 'true' : 'false'}>EN</a>
     <a href="/hi/rag/" class="lang__opt" data-lang="hi" aria-pressed={locale === 'hi' ? 'true' : 'false'}>HI</a>
   </div>
-  <button class="pill" data-sfx-toggle type="button" aria-pressed="true" aria-label="Sound off">
+  <button class="pill" data-sfx-toggle type="button" aria-pressed="true" aria-label={ui.turnSfxOff || 'Turn sound off'}>
     <span data-icon-on>🔊</span><span data-icon-off hidden>🔇</span>
   </button>
-  <button class="pill" data-music-toggle type="button" aria-pressed="false" aria-label="Music on">
+  <button class="pill" data-music-toggle type="button" aria-pressed="false" aria-label={ui.turnMusicOn || 'Turn music on'}>
     <span data-icon-on hidden>🎬</span><span data-icon-off>🎼</span>
   </button>
-  <button class="pill" data-theme-toggle type="button" aria-pressed="false" aria-label="Light theme">
+  <button class="pill" data-theme-toggle type="button" aria-pressed="false" aria-label={ui.themeLight || 'Switch to light theme'}>
     <span data-icon-on hidden>☀️</span><span data-icon-off>🌙</span>
   </button>
 </div>
@@ -61,31 +62,52 @@ const { locale } = Astro.props;
   import { resumeAudio, sfxEnabled, musicEnabled, setSfxEnabled, setMusicEnabled, playPop } from '../../../shared/scripts/audio.js';
 
   const THEME_KEY = 'bittu-theme';
-
-  function paint(btn, on) {
-    btn.setAttribute('aria-pressed', String(on));
-    const onIcon = btn.querySelector('[data-icon-on]');
-    const offIcon = btn.querySelector('[data-icon-off]');
-    onIcon.hidden = !on;
-    offIcon.hidden = on;
-  }
+  const bar = document.querySelector('[data-toolbar]');
+  const labels = JSON.parse(bar?.dataset.labels || '{}');
 
   const sfxBtn = document.querySelector('[data-sfx-toggle]');
   const musicBtn = document.querySelector('[data-music-toggle]');
   const themeBtn = document.querySelector('[data-theme-toggle]');
 
-  paint(sfxBtn, sfxEnabled());
-  paint(musicBtn, musicEnabled());
+  function paintSfx(on) {
+    sfxBtn.setAttribute('aria-pressed', String(on));
+    sfxBtn.setAttribute('aria-label', on ? (labels.turnSfxOff || 'Turn sound off') : (labels.turnSfxOn || 'Turn sound on'));
+    const onIcon = sfxBtn.querySelector('[data-icon-on]');
+    const offIcon = sfxBtn.querySelector('[data-icon-off]');
+    onIcon.hidden = !on;
+    offIcon.hidden = on;
+  }
+
+  function paintMusic(on) {
+    musicBtn.setAttribute('aria-pressed', String(on));
+    musicBtn.setAttribute('aria-label', on ? (labels.turnMusicOff || 'Turn music off') : (labels.turnMusicOn || 'Turn music on'));
+    const onIcon = musicBtn.querySelector('[data-icon-on]');
+    const offIcon = musicBtn.querySelector('[data-icon-off]');
+    onIcon.hidden = !on;
+    offIcon.hidden = on;
+  }
+
+  function paintTheme(isLight) {
+    themeBtn.setAttribute('aria-pressed', String(isLight));
+    themeBtn.setAttribute('aria-label', isLight ? (labels.themeDark || 'Switch to dark theme') : (labels.themeLight || 'Switch to light theme'));
+    const onIcon = themeBtn.querySelector('[data-icon-on]');
+    const offIcon = themeBtn.querySelector('[data-icon-off]');
+    onIcon.hidden = !isLight;
+    offIcon.hidden = isLight;
+  }
+
+  paintSfx(sfxEnabled());
+  paintMusic(musicEnabled());
 
   const savedTheme = localStorage.getItem(THEME_KEY);
   const isLight = savedTheme === 'light';
   document.documentElement.dataset.theme = isLight ? 'light' : 'dark';
-  paint(themeBtn, isLight);
+  paintTheme(isLight);
 
   sfxBtn.addEventListener('click', () => {
     const next = sfxBtn.getAttribute('aria-pressed') !== 'true';
     setSfxEnabled(next);
-    paint(sfxBtn, next);
+    paintSfx(next);
     if (next) { resumeAudio(); playPop(); }
   });
 
@@ -93,14 +115,14 @@ const { locale } = Astro.props;
     const next = musicBtn.getAttribute('aria-pressed') !== 'true';
     resumeAudio();
     setMusicEnabled(next);
-    paint(musicBtn, next);
+    paintMusic(next);
   });
 
   themeBtn.addEventListener('click', () => {
     const next = themeBtn.getAttribute('aria-pressed') !== 'true';
     document.documentElement.dataset.theme = next ? 'light' : 'dark';
     localStorage.setItem(THEME_KEY, next ? 'light' : 'dark');
-    paint(themeBtn, next);
+    paintTheme(next);
     window.dispatchEvent(new CustomEvent('bittu-theme-change'));
   });
 </script>

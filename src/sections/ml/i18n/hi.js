@@ -13,10 +13,10 @@ export default {
   },
 
   toolbar: {
-    sfxOn: 'Sound effects chalu',
-    sfxOff: 'Sound effects band karo',
-    musicOn: 'Background music chalao',
-    musicOff: 'Background music roko',
+    turnSfxOff: 'Sound effects band karo',
+    turnSfxOn: 'Sound effects chalu karo',
+    turnMusicOff: 'Background music band karo',
+    turnMusicOn: 'Background music chalu karo',
     themeLight: 'Light theme par jao',
     themeDark: 'Dark theme par jao',
   },

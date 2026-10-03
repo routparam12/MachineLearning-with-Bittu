@@ -89,6 +89,7 @@ export const hi: Dict = {
     legHigh: 'Badi value',
     legLow: 'Chhoti value',
     masked: 'masked — token aage nahi dekh sakta',
+    noscriptJsRequired: 'Interactive token visualization, attention weights, aur residual stream inspection ke liye browser mein JavaScript enabled hona zaroori hai.',
   },
 
   err: {

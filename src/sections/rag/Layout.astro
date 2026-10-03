@@ -3,10 +3,10 @@ import './styles/rag.css';
 import AppSwitch from '../../shared/components/AppSwitch.astro';
 import Toolbar from './components/Toolbar.astro';
 import Torty from './components/Torty.astro';
-import { getDict } from './i18n/index.js';
+import { DEFAULT_LOCALE, LOCALES, getDict, swapLocale } from './i18n/index.js';
 import { SECTION_BY_ID } from '../index.js';
 
-const { locale = 'en', title } = Astro.props;
+const { locale = DEFAULT_LOCALE, title } = Astro.props;
 const t = getDict(locale);
 const pageTitle = title || t.meta.title;
 const accent = SECTION_BY_ID.rag.accent;
@@ -19,6 +19,11 @@ const accent = SECTION_BY_ID.rag.accent;
     <title>{pageTitle}</title>
     <meta name="description" content={t.meta.description} />
     <link rel="icon" href="/bittu.svg" />
+
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={l} href={new URL(swapLocale(Astro.url, l), Astro.site ?? Astro.url).href} />
+    ))}
+
     <script is:inline>
       // shared theme key across the whole site
       try {
@@ -30,7 +35,7 @@ const accent = SECTION_BY_ID.rag.accent;
   </head>
   <body data-section="rag" style={`--section-accent:${accent}`}>
     <AppSwitch section="rag" locale={locale} />
-    <Toolbar locale={locale} />
+    <Toolbar locale={locale} t={t} />
 
     <main>
       <slot />

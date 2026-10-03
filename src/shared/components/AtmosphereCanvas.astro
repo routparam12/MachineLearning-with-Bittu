@@ -1,0 +1,43 @@
+---
+/* AtmosphereCanvas.astro — Renders a fixed, non-interactive canvas layer for atmospheric
+   cursor smoke and luminous glow across the entire site.
+   - pointer-events: none ensures zero interception of clicks/drags.
+   - Respects user themes and reduced motion.
+   - Preserves 100% native cursor.
+*/
+---
+<canvas id="atmosphere-canvas" aria-hidden="true"></canvas>
+
+<style>
+  #atmosphere-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 45;
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #atmosphere-canvas {
+      display: none !important;
+    }
+  }
+
+  @media (pointer: coarse) {
+    #atmosphere-canvas {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  import { initAtmosphere } from '../scripts/atmosphere.js';
+
+  const canvas = document.getElementById('atmosphere-canvas') as HTMLCanvasElement;
+  if (canvas) {
+    initAtmosphere(canvas);
+  }
+</script>

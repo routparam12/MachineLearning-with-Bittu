@@ -17,7 +17,6 @@ export default {
     skipToPoint: 'skip to the point ↓',
     verifiedAs: 'Verified',
     stageOf: (n, total) => `Stage ${n} · ${total}`,
-    newSince: '— new since the last draft',
     patternsHeading: '15 patterns you’ll actually use',
     patternsSub: 'The 11 stages stay the same. A pattern changes the procedure at two or three of them. Pick one and the walkthrough re-frames; the rail marks the stages it touches.',
     changesStages: 'changes stages',
@@ -28,6 +27,12 @@ export default {
     currentPattern: 'Pattern:',
     withPattern: 'With {name}:',
     petLabel: 'Torty the turtle — poke her for a recap of this stage',
+    turnSfxOff: 'Turn sound off',
+    turnSfxOn: 'Turn sound on',
+    turnMusicOff: 'Turn music off',
+    turnMusicOn: 'Turn music on',
+    themeLight: 'Switch to light theme',
+    themeDark: 'Switch to dark theme',
   },
 
   hero: {

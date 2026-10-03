@@ -66,6 +66,7 @@ export const hi: Dict = {
     musicOn: 'Music: on',
     musicOff: 'Music: off',
     pokeHint: 'Hootie ko chhedo',
+    noscriptJsRequired: 'Interactive step-by-step visualizer aur audio commentary ke liye browser mein JavaScript enabled hona zaroori hai.',
   },
 
   err: {

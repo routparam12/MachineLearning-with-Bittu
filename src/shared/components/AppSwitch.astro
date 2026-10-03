@@ -3,11 +3,13 @@
    flips between the sections defined in src/sections/index.js. Adding a section
    there makes it appear here automatically. */
 import { SECTIONS, sectionHref } from '../../sections/index.js';
+import AtmosphereCanvas from './AtmosphereCanvas.astro';
 
 interface Props { section: string; locale?: string }
 const { section, locale = 'en' } = Astro.props;
 const lang = locale === 'hi' ? 'hi' : 'en';
 ---
+<AtmosphereCanvas />
 <nav class="appswitch" aria-label="Switch section">
   {SECTIONS.map((s) => (
     <a

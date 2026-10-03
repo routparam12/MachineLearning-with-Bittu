@@ -3,17 +3,17 @@
    `game` names the component slotted into that stage's section, or null. */
 
 export const STAGES = [
-  { id: 'ingest',      isNew: false, game: null },
-  { id: 'chunk',       isNew: false, game: 'TheCut' },
-  { id: 'embed',       isNew: false, game: 'DropThePin' },
-  { id: 'store',       isNew: false, game: null },
-  { id: 'route',       isNew: false, game: 'PickThePipe' },
-  { id: 'retrieve',    isNew: false, game: 'TwoBadges' },
-  { id: 'rerank',      isNew: false, game: 'TheDial' },
-  { id: 'assemble',    isNew: false, game: 'BuildTheAsk' },
-  { id: 'generate',    isNew: false, game: 'WhatBroke' },
-  { id: 'ground',      isNew: false, game: 'CheckTheClaim' },
-  { id: 'personalize', isNew: false, game: null },
+  { id: 'ingest',      game: null },
+  { id: 'chunk',       game: 'TheCut' },
+  { id: 'embed',       game: 'DropThePin' },
+  { id: 'store',       game: null },
+  { id: 'route',       game: 'PickThePipe' },
+  { id: 'retrieve',    game: 'TwoBadges' },
+  { id: 'rerank',      game: 'TheDial' },
+  { id: 'assemble',    game: 'BuildTheAsk' },
+  { id: 'generate',    game: 'WhatBroke' },
+  { id: 'ground',      game: 'CheckTheClaim' },
+  { id: 'personalize', game: null },
 ];
 
 /* Chapter 3 in the games spec == pipeline stage 2 (chunking). "Two Searches" is

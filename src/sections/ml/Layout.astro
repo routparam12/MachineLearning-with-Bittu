@@ -3,7 +3,7 @@ import './styles/ml.css';
 import Bittu from './components/Bittu.astro';
 import Toolbar from './components/Toolbar.astro';
 import AppSwitch from '../../shared/components/AppSwitch.astro';
-import { DEFAULT_LOCALE, getDict } from './i18n/index.js';
+import { DEFAULT_LOCALE, LOCALES, getDict, swapLocale } from './i18n/index.js';
 import { SECTION_BY_ID } from '../index.js';
 
 const { locale = DEFAULT_LOCALE, title } = Astro.props;
@@ -19,6 +19,11 @@ const accent = SECTION_BY_ID.ml.accent;
     <title>{pageTitle}</title>
     <meta name="description" content={t.meta.description} />
     <link rel="icon" href="/bittu.svg" />
+
+    {LOCALES.map((l) => (
+      <link rel="alternate" hreflang={l} href={new URL(swapLocale(Astro.url, l), Astro.site ?? Astro.url).href} />
+    ))}
+
     <script is:inline>
       // set the theme before first paint, so a saved light preference never flashes dark
       try {

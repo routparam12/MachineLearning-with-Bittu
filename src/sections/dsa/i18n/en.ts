@@ -67,6 +67,7 @@ export const en = {
     musicOn: 'Music: on',
     musicOff: 'Music: off',
     pokeHint: 'Poke Hootie',
+    noscriptJsRequired: 'Interactive step-by-step visualizer and audio commentary require JavaScript enabled in your browser.',
   },
 
   err: {

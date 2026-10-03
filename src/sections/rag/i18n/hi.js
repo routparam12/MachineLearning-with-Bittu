@@ -17,7 +17,6 @@ export default {
     skipToPoint: 'seedhe point par jao ↓',
     verifiedAs: 'Verified',
     stageOf: (n, total) => `Stage ${n} · ${total}`,
-    newSince: '— pichhle draft ke baad joda gaya',
     patternsHeading: '15 patterns jo aap sach mein use karoge',
     patternsSub: 'Gyaarah stages wahi rehte hain. Ek pattern un mein se do-teen par procedure badalta hai. Ek chuno aur walkthrough re-frame ho jaata hai; rail un stages ko mark karti hai jinhe woh chhoota hai.',
     changesStages: 'badalta hai stages',
@@ -28,6 +27,12 @@ export default {
     currentPattern: 'Pattern:',
     withPattern: '{name} ke saath:',
     petLabel: 'Torty kachhua — is stage ka recap sunne ke liye poke karo',
+    turnSfxOff: 'Sound effects band karo',
+    turnSfxOn: 'Sound effects chalu karo',
+    turnMusicOff: 'Background music band karo',
+    turnMusicOn: 'Background music chalu karo',
+    themeLight: 'Light theme par jao',
+    themeDark: 'Dark theme par jao',
   },
 
   hero: {
