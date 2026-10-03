@@ -21,6 +21,7 @@ export default {
     patternsHeading: '15 patterns jo aap sach mein use karoge',
     patternsSub: 'Gyaarah stages wahi rehte hain. Ek pattern un mein se do-teen par procedure badalta hai. Ek chuno aur walkthrough re-frame ho jaata hai; rail un stages ko mark karti hai jinhe woh chhoota hai.',
     changesStages: 'badalta hai stages',
+    changesStage: 'badalta hai stage',
     applyPattern: 'walkthrough par lagao →',
     appliedLabel: 'laga hua',
     resetPattern: 'wapas Basic RAG par',
@@ -42,12 +43,12 @@ export default {
     { short: 'Chunk & clean',     preview: 'Document tukdon mein kata jaata hai. Cut kahan girti hai, yeh ek fact ko aadha kaat sakti hai — neeche try karo.' },
     { short: 'Embed',             preview: 'Har chunk vector space mein ek point ban jaata hai. Similarity search bas distance hai.' },
     { short: 'Store',             preview: 'Vectors index mein jaate hain, pehle din se owner, tenant aur permission fields ke saath.' },
-    { short: 'Route',             preview: 'Naya stage. Sawaal classify hota hai — lookup, aggregate, summarize, compare — embed hone se pehle hi.' },
+    { short: 'Route',             preview: 'Sawaal classify hota hai — lookup, aggregate, summarize, compare — embed hone se pehle hi.' },
     { short: 'Retrieve + filter', preview: 'Search access filter ke saath chalti hai, baad mein nahi. Yahi stage tay karta hai kaun kya dekh sakta hai.' },
     { short: 'Rerank',            preview: 'Ek cross-encoder candidates ko dobara order karta hai taaki sahi chunk list ke beech mein dabe na.' },
     { short: 'Assemble',          preview: 'Chunks dedupe hote hain, order hote hain, aur token budget ke andar ek context block mein pack hote hain.' },
     { short: 'Generate',          preview: 'Model sirf assembled context se jawaab deta hai — banane ke bajaye mana karne ke instruction ke saath.' },
-    { short: 'Check',             preview: 'Naya stage. Jawaab ke har claim ko dikhane se pehle ek retrieved chunk se check kiya jaata hai.' },
+    { short: 'Check',             preview: 'Jawaab ke har claim ko dikhane se pehle ek retrieved chunk se check kiya jaata hai.' },
     { short: 'Personalize',       preview: 'Yahan sirf user ki apni live-fetch ki gayi details — access control do stage pehle ho chuka.' },
   ],
 
@@ -91,7 +92,6 @@ export default {
       callout: 'User ke <em>documents</em> yahan aate hain, vector store mein, apne ACL ke saath. User ke <em>records</em> — unka plan, balance, order history — nahi. Woh stage 11 par id se live fetch hote hain. Ek record embed karna matlab ek purani copy se jawaab dena aur deletion ko dard bhara banana.',
     },
     {
-      isNew: true,
       title: 'Query understanding & routing',
       body: [
         'Har sawaal ko similarity search nahi chahiye. "March mein humne kitne invoices bheje" ko SQL chahiye. "Poori handbook summarize karo" ko poore document par map-reduce chahiye, paanch retrieved chunks ko nahi jo summary hone ka natak karein. Yeh stage tay karta hai ki aapke sawaal ko sach mein kaun sa pipe chahiye, kuchh embed hone se pehle.',
@@ -148,7 +148,6 @@ export default {
       ],
     },
     {
-      isNew: true,
       title: 'Groundedness check',
       body: [
         'Jawaab user tak pahunchne se pehle, usmein har claim ko un chunks se check kiya jaata hai jo sach mein retrieve hue the. Jis claim ke peeche koi supporting chunk nahi, use naram ya hedge nahi kiya jaata — system "in documents mein nahi" keh deta hai, andaaza lagane ke bajaye.',

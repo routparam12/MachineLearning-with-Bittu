@@ -21,6 +21,7 @@ export default {
     patternsHeading: '15 patterns you’ll actually use',
     patternsSub: 'The 11 stages stay the same. A pattern changes the procedure at two or three of them. Pick one and the walkthrough re-frames; the rail marks the stages it touches.',
     changesStages: 'changes stages',
+    changesStage: 'changes stage',
     applyPattern: 'apply to the walkthrough →',
     appliedLabel: 'applied',
     resetPattern: 'back to Basic RAG',
@@ -43,12 +44,12 @@ export default {
     { short: 'Chunk & clean',     preview: 'The document is cut into pieces. Where the cut lands can sever a fact in half — try it below.' },
     { short: 'Embed',             preview: 'Each chunk becomes a point in vector space. Similarity search is just distance.' },
     { short: 'Store',             preview: 'Vectors go into the index with owner, tenant, and permission fields attached from day one.' },
-    { short: 'Route',             preview: 'New stage. The question is classified — lookup, aggregate, summarize, compare — before it’s embedded at all.' },
+    { short: 'Route',             preview: 'The question is classified — lookup, aggregate, summarize, compare — before it’s embedded at all.' },
     { short: 'Retrieve + filter', preview: 'Search runs with the access filter pushed in, not applied afterward. This is the stage that decides who can see what.' },
     { short: 'Rerank',            preview: 'A cross-encoder reorders the candidates so the right chunk isn’t buried in the middle of the list.' },
     { short: 'Assemble',          preview: 'Chunks are deduplicated, ordered, and packed into a context block within the token budget.' },
     { short: 'Generate',          preview: 'The model answers using only the assembled context — instructed to refuse rather than invent.' },
-    { short: 'Check',             preview: 'New stage. Every claim in the answer is checked against a retrieved chunk before it’s shown.' },
+    { short: 'Check',             preview: 'Every claim in the answer is checked against a retrieved chunk before it’s shown.' },
     { short: 'Personalize',       preview: 'Only the user’s own live-fetched details go here — access control already happened two stages back.' },
   ],
 
@@ -92,7 +93,6 @@ export default {
       callout: 'A user’s <em>documents</em> belong here, in the vector store, with their ACL in the metadata. A user’s <em>records</em> — their plan, balance, order history — do not. Those get fetched live by id at stage 11. Embedding a record means answering from a stale copy and makes deletion painful.',
     },
     {
-      isNew: true,
       title: 'Query understanding & routing',
       body: [
         'Not every question wants a similarity search. "How many invoices did we send in March" wants SQL. "Summarize the whole handbook" wants map-reduce over the whole document, not five retrieved chunks pretending to be a summary. This stage decides which pipe your question actually needs before anything gets embedded.',
@@ -149,7 +149,6 @@ export default {
       ],
     },
     {
-      isNew: true,
       title: 'Groundedness check',
       body: [
         'Before an answer reaches the user, every claim in it gets checked against the chunks that were actually retrieved. A claim with no supporting chunk doesn’t get softened or hedged — the system says "not in these documents" instead of guessing.',

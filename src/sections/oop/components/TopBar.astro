@@ -25,8 +25,8 @@ const labels = JSON.stringify({
         >{DICTS[l].short}</a>
       ))}
     </nav>
-    <button class="iconbtn" data-sfx-toggle type="button">🔇</button>
-    <button class="iconbtn" data-music-toggle type="button">🎬</button>
-    <button class="iconbtn" data-theme-toggle type="button">☀️</button>
+    <button class="iconbtn" data-sfx-toggle type="button" aria-pressed="true" aria-label="Sound off">🔊</button>
+    <button class="iconbtn" data-music-toggle type="button" aria-pressed="false" aria-label="Music on">🎼</button>
+    <button class="iconbtn" data-theme-toggle type="button" aria-pressed="false" aria-label="Light theme">🌙</button>
   </div>
 </div>

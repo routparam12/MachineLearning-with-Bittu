@@ -1,13 +1,100 @@
 ---
 import BaseLayout from '../../../sections/oop/Layout.astro';
-import { langPaths, type Lang } from '../../../sections/oop/i18n';
+import { DICTS, langPaths, type Lang } from '../../../sections/oop/i18n';
 
 export const getStaticPaths = langPaths;
 
 const lang = Astro.params.lang as Lang;
 ---
 <BaseLayout lang={lang}>
-  <div id="app" data-lang={lang} data-home={`/${lang}/`}></div>
+  <div id="app" data-lang={lang} data-home={`/${lang}/`}>
+    <noscript>
+      <div class="wrap">
+        <header class="head">
+          <a class="back" href={`/${lang}/`}>{DICTS[lang].ui.backHome}</a>
+          <h1><span aria-hidden="true">🐍</span> {DICTS[lang].ui.heroA} <em>{DICTS[lang].ui.heroEm}</em></h1>
+          <p class="tagline">{DICTS[lang].ui.heroSub}</p>
+        </header>
+
+        <section class="content-card">
+          <p class="kicker">{DICTS[lang].ui.introTitle}</p>
+          <h3>{DICTS[lang].ui.classObjectTitle}</h3>
+          <p>{DICTS[lang].ui.classObjectDef}</p>
+          <div class="pybox">
+            <div class="pybox-head"><span class="pybox-label">Python</span></div>
+            <pre><code class="py-src">{DICTS[lang].classObject.code}</code></pre>
+            <div class="expected" style="margin-top:10px">
+              <strong>{DICTS[lang].ui.outputLabel}</strong>
+              <pre>{DICTS[lang].classObject.output}</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="pillars-head">
+          <p class="kicker">{DICTS[lang].ui.cardsTitle}</p>
+          <p>{DICTS[lang].ui.cardsSub}</p>
+        </section>
+
+        <section class="pillars">
+          {DICTS[lang].cards.map((card) => (
+            <article class="pillar" style="margin-bottom:1.5rem;border:1px solid var(--border);border-radius:12px;padding:1.25rem;">
+              <header style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                <span class="pillar-icon" style="font-size:1.5rem;">{card.icon}</span>
+                <div>
+                  <h3 class="pillar-title" style="margin:0;">{card.title}</h3>
+                  <p class="pillar-oneliner" style="margin:0;color:var(--mute);">{card.oneLiner}</p>
+                </div>
+              </header>
+              <div class="pillar-body">
+                <div class="pillar-section" style="margin-bottom:0.75rem;">
+                  <h4>{DICTS[lang].ui.definitionLabel}</h4>
+                  <p>{card.definition}</p>
+                </div>
+                <div class="pillar-section" style="margin-bottom:0.75rem;">
+                  <h4>{DICTS[lang].ui.implementationLabel}</h4>
+                  <p>{card.note}</p>
+                </div>
+                <div class="pillar-section" style="margin-bottom:0.75rem;">
+                  <h4>{DICTS[lang].ui.exampleLabel}</h4>
+                  <pre><code>{card.code}</code></pre>
+                  <pre><code>{card.output}</code></pre>
+                </div>
+                <div class="pillar-section">
+                  <h4>{DICTS[lang].ui.realLifeLabel}</h4>
+                  <p class="real-life">{card.realLife}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section class="recap">
+          <h3>{DICTS[lang].ui.recapTitle}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>{DICTS[lang].ui.recapConcept}</th>
+                <th>{DICTS[lang].ui.recapMatlab}</th>
+                <th>{DICTS[lang].ui.recapExample}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {DICTS[lang].recap.map((row) => (
+                <tr>
+                  <td>{row.concept}</td>
+                  <td>{row.matlab}</td>
+                  <td>{row.example}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="pyodide-note">{DICTS[lang].ui.pyodideNote}</p>
+        </section>
+
+        <p class="wrap foot">{DICTS[lang].site.foot}</p>
+      </div>
+    </noscript>
+  </div>
 </BaseLayout>
 
 <script>

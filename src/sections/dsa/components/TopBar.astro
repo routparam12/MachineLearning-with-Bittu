@@ -27,8 +27,8 @@ const labels = JSON.stringify({
       ))}
     </nav>
 
-    <button class="iconbtn" data-sfx-toggle type="button">🔇</button>
-    <button class="iconbtn" data-music-toggle type="button">🎬</button>
-    <button class="iconbtn" data-theme-toggle type="button">☀️</button>
+    <button class="iconbtn" data-sfx-toggle type="button" aria-pressed="true" aria-label={d.ui.sfxOff}>🔊</button>
+    <button class="iconbtn" data-music-toggle type="button" aria-pressed="false" aria-label={d.ui.musicOn}>🎼</button>
+    <button class="iconbtn" data-theme-toggle type="button" aria-pressed="false" aria-label={d.ui.themeToLight}>🌙</button>
   </div>
 </div>

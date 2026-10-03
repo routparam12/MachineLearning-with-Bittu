@@ -15,7 +15,30 @@ const d = DICTS[lang];
 const info = d.algo[a.slug];
 ---
 <BaseLayout lang={lang} title={`${info.name} — ${d.site.brand}`} desc={info.idea}>
-  <div id="app" data-algo={a.slug} data-lang={lang} data-home={href(lang, 'sorting')}></div>
+  <div id="app" data-algo={a.slug} data-lang={lang} data-home={href(lang, 'sorting')}>
+    <noscript>
+      <div class="wrap">
+        <header class="head">
+          <a class="back" href={href(lang, 'sorting')}>{d.ui.backAll}</a>
+          <h1><span class="head-emoji">{a.emoji}</span>{info.name}</h1>
+          <p class="tagline">{info.tagline}</p>
+          <ul class="chips">
+            <li><b>Best</b> <span>{a.best}</span></li>
+            <li><b>Average</b> <span>{a.avg}</span></li>
+            <li><b>Worst</b> <span>{a.worst}</span></li>
+            <li><b>Space</b> <span>{a.space}</span></li>
+            <li><b>Order</b> <span>{a.stable}</span></li>
+          </ul>
+        </header>
+
+        <section class="algo-explanation" style="margin-top:2rem;border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+          <h2 style="margin-top:0;">{info.name}</h2>
+          <p style="font-size:1.1rem;line-height:1.6;">{info.idea}</p>
+          <p style="color:var(--mute);margin-top:1rem;"><em>Interactive step-by-step visualizer and audio commentary require JavaScript enabled in your browser.</em></p>
+        </section>
+      </div>
+    </noscript>
+  </div>
 </BaseLayout>
 <script>
   import { mount } from '../../../../sections/dsa/scripts/ui.js';

@@ -7,12 +7,12 @@ export const STAGES = [
   { id: 'chunk',       isNew: false, game: 'TheCut' },
   { id: 'embed',       isNew: false, game: 'DropThePin' },
   { id: 'store',       isNew: false, game: null },
-  { id: 'route',       isNew: true,  game: 'PickThePipe' },
+  { id: 'route',       isNew: false, game: 'PickThePipe' },
   { id: 'retrieve',    isNew: false, game: 'TwoBadges' },
   { id: 'rerank',      isNew: false, game: 'TheDial' },
   { id: 'assemble',    isNew: false, game: 'BuildTheAsk' },
   { id: 'generate',    isNew: false, game: 'WhatBroke' },
-  { id: 'ground',      isNew: true,  game: 'CheckTheClaim' },
+  { id: 'ground',      isNew: false, game: 'CheckTheClaim' },
   { id: 'personalize', isNew: false, game: null },
 ];
 

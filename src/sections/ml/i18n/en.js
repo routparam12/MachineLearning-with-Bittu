@@ -23,6 +23,7 @@ export default {
 
   lockHint: 'Finish the previous mini-game to open this',
   nextChapter: 'Next: chapter',
+  nextRoadmap: 'Next: roadmap',
 
   hero: {
     greeting: 'Hi, I am Bittu. Click any underlined word and I will explain it. Play the game in each chapter to unlock the next one.',
@@ -97,23 +98,23 @@ export default {
     eyebrow: 'chapter three · supervised, flavour one',
     title: 'Regression (numbers)',
     p1: 'When the answer is a quantity on a sliding scale — ₹, kilograms, minutes, degrees — you are doing',
-    p1b: '. Fit a line through the dots so the',
+    p1b: '. Fit a line through the dots so the ',
     p1c: 'is as small as possible. That is the whole job.',
     footnote: 'is just that button, run a thousand times a second.',
   },
 
   ch4: {
-    eyebrow: 'chapter three · supervised, flavour two',
+    eyebrow: 'chapter four · supervised, flavour two',
     title: 'Classification (category)',
     p1: 'When the answer is one of a fixed set of buckets — pass or fail, junk or real, cat or dog — you are doing',
-    p1b: '. The model draws a',
+    p1b: '. The model draws a ',
     p1c: 'and everything on one side gets one label.',
     footnoteBefore: 'Careful with',
     footnote: 'as a score. It flatters lazy models when one class is rare.',
   },
 
   ch5: {
-    eyebrow: 'chapter four · the other branch',
+    eyebrow: 'chapter five · the other branch',
     title: 'Unsupervised learning',
     p1Before: 'Learning from ',
     p1After: ' — the model finds hidden patterns, structures or groupings on its own, with no correct answer provided.',
@@ -126,13 +127,13 @@ export default {
   },
 
   ch6: {
-    eyebrow: 'chapter five · the thing you actually ship',
+    eyebrow: 'chapter six · the thing you actually ship',
     title: 'Data + algorithm → model',
     p1Before: 'A ',
     p1After: ' is the mathematical function the algorithm learned from data. It takes features (X) and produces a prediction (ŷ). Once trained, it is the brain that handles new, unseen data.',
     formula: 'data + algorithm → model',
     p2a: 'Which means the only honest test is data the model has never met: the',
-    p2b: '. A model that aces its training data and flops on new data has',
+    p2b: '. A model that aces its training data and flops on new data has ',
     p2c: '— memorised instead of learned.',
     p3a: 'The opposite failure is',
     p3b: '. Your job is finding the middle.',

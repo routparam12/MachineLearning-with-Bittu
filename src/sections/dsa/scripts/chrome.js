@@ -28,7 +28,7 @@ export function initChrome() {
     sfxBtn.setAttribute('aria-label', sfxBtn.title);
   };
   const paintMusic = () => {
-    musicBtn.textContent = sound.state.music ? '🎵' : '🎬';
+    musicBtn.textContent = sound.state.music ? '🎬' : '🎼';
     musicBtn.title = sound.state.music ? labels.musicOn : labels.musicOff;
     musicBtn.setAttribute('aria-pressed', String(sound.state.music));
     musicBtn.setAttribute('aria-label', musicBtn.title);

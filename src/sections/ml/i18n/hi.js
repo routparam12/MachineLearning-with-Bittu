@@ -23,6 +23,7 @@ export default {
 
   lockHint: 'Pichhla mini-game khatam karo, tabhi yeh khulega',
   nextChapter: 'Aage: chapter',
+  nextRoadmap: 'Aage: roadmap',
 
   hero: {
     greeting: 'Namaste, main Bittu hoon. Kisi bhi underline kiye shabd par click karo, main samjha dunga. Har chapter ka game khelo taaki agla unlock ho.',
@@ -97,23 +98,23 @@ export default {
     eyebrow: 'chapter teen · supervised, flavour ek',
     title: 'Regression (numbers)',
     p1: 'Jab jawaab ek sliding scale par ek maatra ho — ₹, kilograms, minutes, degrees — to aap kar rahe ho',
-    p1b: '. Dots ke beech se ek line aise fit karo ki',
+    p1b: '. Dots ke beech se ek line aise fit karo ki ',
     p1c: 'jitna ho sake utna chhota ho. Bas yahi poora kaam hai.',
     footnote: 'bas wahi button hai, ek second mein hazaar baar chalaya gaya.',
   },
 
   ch4: {
-    eyebrow: 'chapter teen · supervised, flavour do',
+    eyebrow: 'chapter chaar · supervised, flavour do',
     title: 'Classification (category)',
     p1: 'Jab jawaab tay buckets mein se ek ho — pass ya fail, junk ya real, billi ya kutta — to aap kar rahe ho',
-    p1b: '. Model ek',
+    p1b: '. Model ek ',
     p1c: 'banata hai aur ek taraf ki har cheez ko ek label milta hai.',
     footnoteBefore: 'Dhyaan se',
     footnote: 'ko score ke roop mein. Jab ek class durlabh ho to yeh aalasi models ko achha dikhata hai.',
   },
 
   ch5: {
-    eyebrow: 'chapter chaar · doosri branch',
+    eyebrow: 'chapter paanch · doosri branch',
     title: 'Unsupervised learning',
     p1Before: 'Seekhna ',
     p1After: ' se — model khud hi chhupe patterns, structures ya groupings dhoondhta hai, bina kisi sahi jawaab ke.',
@@ -126,13 +127,13 @@ export default {
   },
 
   ch6: {
-    eyebrow: 'chapter paanch · jo cheez aap asal mein ship karte ho',
+    eyebrow: 'chapter chhe · jo cheez aap asal mein ship karte ho',
     title: 'Data + algorithm → model',
     p1Before: 'Ek ',
     p1After: ' woh mathematical function hai jo algorithm ne data se seekha. Yeh features (X) leta hai aur ek prediction (y-hat) deta hai. Ek baar train hone ke baad, yahi woh dimaag hai jo naye, andekhe data ko sambhaalta hai.',
     formula: 'data + algorithm → model',
     p2a: 'Matlab ekmaatra imaandaar test woh data hai jise model kabhi mila hi nahi: the',
-    p2b: '. Jo model apne training data par top kare aur naye data par flop ho jaaye woh',
+    p2b: '. Jo model apne training data par top kare aur naye data par flop ho jaaye woh ',
     p2c: '— seekhne ke bajaye ratt liya.',
     p3a: 'Ulti galti hai',
     p3b: '. Aapka kaam beech ka raasta dhoondhna hai.',

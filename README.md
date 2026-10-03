@@ -6,6 +6,8 @@ in the top-left corner of every page.
 | Section | Path | What it is |
 | --- | --- | --- |
 | **ML with Bittu** *(default)* | `/{lang}/` | A playable board where a pet named Bittu teaches machine learning one mini-game at a time. |
+| **OOP in Python** | `/{lang}/oop/` | Visual and interactive guide through the 4 core pillars of Object-Oriented Programming (Encapsulation, Abstraction, Inheritance, Polymorphism) with runnable in-browser Python (via Pyodide) and Classy the snake pet. |
+| **PyTorch Essentials** | `/{lang}/pytorch/` | Visual, problem-first reference covering 17 essential PyTorch concepts across 5 parts (Tensors, Autograd, Neural Networks, Training Loops, and Production Deployments) with Torchy pet tips. |
 | **Searching & Sorting** | `/{lang}/searching-sorting/` | "Algo Adda" — type in your own array, press *Next*, and Hootie walks a sorting/searching algorithm one move at a time. |
 | **RAG, stage by stage** | `/{lang}/rag/` | One question traced through all 11 stages of a retrieval-augmented-generation pipeline. The flow diagram *is* the navigation; each stage has a small game that fails on purpose and never blocks the reading. |
 | **Transformer** | `/{lang}/transformer/` | Step through a real transformer's forward pass — tokens, embeddings, attention, feed-forward, softmax — and watch it write the next word, then loop. Two tasks: *continue text*, or *answer a question*, which wraps your question as `<q> … <a>` so that continuing it **is** answering. Two trained models behind a toggle: a tiny one whose numbers you can check by hand, and a bigger one that actually answers. |
@@ -13,6 +15,10 @@ in the top-left corner of every page.
 Every section is available in **English** (`/en/…`) and **Hinglish** (`/hi/…`), in
 light and dark themes. The language choice, theme, and sound on/off state are
 shared across every section (`bittu-lang` / `bittu-theme` / `bittu-sfx` / `bittu-music`).
+
+> **Recommended GitHub Repository Metadata:**
+> - **Description**: *Interactive, bilingual (English & Hinglish) learning platform for Machine Learning, Python OOP, PyTorch, Searching/Sorting DSA, RAG pipelines, and Transformers.*
+> - **Topics**: `machine-learning`, `python`, `oop`, `pytorch`, `rag`, `transformers`, `deep-learning`, `algorithms`, `interactive-learning`, `astro`, `hinglish`
 
 ## Run it
 
@@ -39,6 +45,18 @@ src/
 │   │   ├── scripts/game.js
 │   │   ├── i18n/               en.js, hi.js, index.js (getDict)
 │   │   └── styles/ml.css
+│   ├── oop/
+│   │   ├── Layout.astro
+│   │   ├── components/         Classy, TopBar
+│   │   ├── scripts/            chrome.js, pyrunner.js, ui.js
+│   │   ├── i18n/               en.ts, hi.ts, index.ts
+│   │   └── styles/oop.css
+│   ├── pytorch/
+│   │   ├── Layout.astro
+│   │   ├── components/         Torchy, TopBar
+│   │   ├── scripts/            chrome.js, ui.js
+│   │   ├── i18n/               en.js, hi.js, index.ts
+│   │   └── styles/pytorch.css
 │   ├── dsa/
 │   │   ├── Layout.astro
 │   │   ├── components/TopBar.astro
@@ -73,6 +91,8 @@ src/
 │   ├── index.astro                    → redirects to /en/
 │   └── [lang]/
 │       ├── index.astro                → sections/ml   (ML owns the locale root)
+│       ├── oop/                       → sections/oop
+│       ├── pytorch/                   → sections/pytorch
 │       ├── searching-sorting/…        → sections/dsa
 │       ├── rag/                       → sections/rag
 │       └── transformer/               → sections/transformer

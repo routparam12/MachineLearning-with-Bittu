@@ -8,7 +8,48 @@ const lang = Astro.params.lang as Lang;
 const d = DICTS[lang];
 ---
 <BaseLayout lang={lang}>
-  <div id="app" data-lang={lang} data-home={`/${lang}/`}></div>
+  <div id="app" data-lang={lang} data-home={`/${lang}/`}>
+    <noscript>
+      <div class="wrap">
+        <header class="head">
+          <a class="back" href={`/${lang}/`}>{d.ui.backHome}</a>
+          <h1><span class="head-emoji">🧠</span> {d.site.heroA} <em>{d.site.heroEm}</em></h1>
+          <p class="tagline">{d.site.heroSub}</p>
+        </header>
+
+        <section class="learning-cards" aria-label={d.ui.learningPaths}>
+          <article class="learning-card working-card">
+            <p class="card-kicker">01 · {d.ui.productionKicker}</p>
+            <h2>{d.ui.workingTitle}</h2>
+            <p>{d.ui.workingDesc}</p>
+            <div class="production-flow" style="display:block;margin-top:1rem;">
+              <pre>{d.say.overviewBefore}</pre>
+              <div class="block-divider" style="margin:1rem 0;">{d.ui.transformerBlocks}<br /><small>{d.ui.transformerBlocksHint}</small></div>
+              <pre>{d.say.overviewAfter}</pre>
+              <p class="loop-copy">{d.say.inferenceLoop}</p>
+              <p><a class="reference-link" href="https://paramjeetrout.substack.com/p/gpt-3-end-to-end-what-actually-happens" target="_blank" rel="noreferrer">{d.ui.readProduction} ↗</a></p>
+            </div>
+          </article>
+
+          <article class="learning-card model-card" style="margin-top:1.5rem;">
+            <p class="card-kicker">02 · {d.ui.layerKicker}</p>
+            <h2>{d.ui.architectureTitle}</h2>
+            <p>{d.ui.architectureDesc}</p>
+            <div class="layer-mini-diagram" aria-hidden="true" style="margin:1rem 0;font-family:var(--mono);">
+              <span>X₀</span> <i>→</i> <span>ATTN</span> <i>→</i> <span>FFN</span> <i>→</i> <span>LOGITS</span>
+            </div>
+            <p><a class="reference-link" href="https://bbycroft.net/llm" target="_blank" rel="noreferrer">{d.ui.exploreReference} ↗</a></p>
+          </article>
+        </section>
+
+        <section class="setup-hint" style="margin-top:2rem;border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+          <h3>{d.site.title}</h3>
+          <p>{d.site.heroSub}</p>
+          <p style="color:var(--mute);margin-top:1rem;"><em>Interactive token visualization, attention weights, and residual stream inspection require JavaScript enabled in your browser.</em></p>
+        </section>
+      </div>
+    </noscript>
+  </div>
   <p class="wrap foot">{d.site.foot}</p>
 </BaseLayout>
 

@@ -24,3 +24,8 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Scratch & temporary notes
+say_block.txt
+temp_say.txt
+*.tmp

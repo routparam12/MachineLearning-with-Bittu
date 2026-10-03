@@ -23,7 +23,7 @@ const rows = PATTERNS.map((p) => ({ ...p, ...t.patterns[p.id] }));
             <span class="pgal__name">{p.name}</span>
             {p.affects.length > 0 && (
               <span class="pgal__stages">
-                {t.ui.changesStages} {p.affects.map((s) => s + 1).join(', ')}
+                {p.affects.length === 1 ? t.ui.changesStage : t.ui.changesStages} {p.affects.map((s) => s + 1).join(', ')}
               </span>
             )}
             <span class="pgal__chev" aria-hidden="true">▾</span>

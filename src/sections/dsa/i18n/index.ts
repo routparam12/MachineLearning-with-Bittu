@@ -38,7 +38,7 @@ export function swapLang(url: URL, to: Lang): string {
   const parts = url.pathname.split('/').filter(Boolean);
   if (isLang(parts[0])) parts[0] = to;
   else parts.unshift(to);
-  return '/' + parts.join('/') + (parts.length === 1 ? '/' : '');
+  return '/' + parts.join('/') + '/';
 }
 
 /** Every locale for getStaticPaths(). */

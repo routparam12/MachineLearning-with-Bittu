@@ -1,13 +1,86 @@
 ---
 import BaseLayout from '../../../sections/pytorch/Layout.astro';
-import { langPaths, type Lang } from '../../../sections/pytorch/i18n';
+import { DICTS, langPaths, type Lang } from '../../../sections/pytorch/i18n';
 
 export const getStaticPaths = langPaths;
 
 const lang = Astro.params.lang as Lang;
+const d = DICTS[lang];
 ---
 <BaseLayout lang={lang}>
-  <div id="app" data-lang={lang} data-home={`/${lang}/`}></div>
+  <div id="app" data-lang={lang} data-home={`/${lang}/`}>
+    <noscript>
+      <div class="wrap">
+        <header class="head">
+          <a class="back" href={`/${lang}/`}>{d.ui.backHome}</a>
+          <h1><span aria-hidden="true">🔥</span> {d.ui.heroA} <em>{d.ui.heroEm}</em></h1>
+          <p class="tagline">{d.ui.heroSub}</p>
+          <p class="note">{d.ui.pyodideNote}</p>
+        </header>
+
+        <nav class="toc" aria-label={d.ui.tocLabel}>
+          {d.parts.map((p) => (
+            <a href={`#part-${p.num}`}><b>{p.num}</b> {p.title}</a>
+          ))}
+        </nav>
+
+        {d.parts.map((p) => (
+          <section class="part" id={`part-${p.num}`} style="margin-top:2rem;">
+            <div class="part-head" style="margin-bottom:1rem;">
+              <span class="part-num" style="font-weight:bold;color:var(--accent);">PART {p.num}</span>
+              <h2 class="part-title">{p.title}</h2>
+            </div>
+            <div class="cards">
+              {p.cards.map((c) => (
+                <article class="card2" style="margin-bottom:1.5rem;border:1px solid var(--border);border-radius:12px;padding:1.25rem;">
+                  <header style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
+                    <span class="card2-num" style="font-weight:bold;color:var(--accent);">{c.num}</span>
+                    <h3 class="card2-title" style="margin:0;">{c.title}</h3>
+                  </header>
+                  <div class="card2-body">
+                    {c.why || c.how || c.solves ? (
+                      <div class="card-triad" style="margin-bottom:1rem;">
+                        {c.why && (
+                          <div class="triad-row" style="margin-bottom:0.5rem;">
+                            <span class="triad-badge" style="font-weight:bold;">{d.ui.whyLabel || 'Why required?'}</span>
+                            <p style="margin:0.25rem 0;">{c.why}</p>
+                          </div>
+                        )}
+                        {c.how && (
+                          <div class="triad-row" style="margin-bottom:0.5rem;">
+                            <span class="triad-badge" style="font-weight:bold;">{d.ui.howLabel || 'How it works?'}</span>
+                            <p style="margin:0.25rem 0;">{c.how}</p>
+                          </div>
+                        )}
+                        {c.solves && (
+                          <div class="triad-row">
+                            <span class="triad-badge" style="font-weight:bold;">{d.ui.solvesLabel || 'Problem solves'}</span>
+                            <p style="margin:0.25rem 0;">{c.solves}</p>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <p>{c.desc}</p>
+                    )}
+                    <div class="codebox">
+                      <div class="codebox-head">Python</div>
+                      <pre><code>{c.code}</code></pre>
+                    </div>
+                    <div class="expected" style="margin-top:0.75rem;">
+                      <strong>{d.ui.outputLabel}</strong>
+                      <pre>{c.output}</pre>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+
+        <p class="wrap foot">{d.site.foot}</p>
+      </div>
+    </noscript>
+  </div>
 </BaseLayout>
 
 <script>

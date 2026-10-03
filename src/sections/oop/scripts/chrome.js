@@ -41,7 +41,7 @@ export function initChrome() {
     sfxBtn.setAttribute('aria-label', sound.state.sfx ? labels.sfxOn : labels.sfxOff);
   };
   const paintMusic = () => {
-    musicBtn.textContent = sound.state.music ? '🎵' : '🎬';
+    musicBtn.textContent = sound.state.music ? '🎬' : '🎼';
     musicBtn.setAttribute('aria-pressed', String(sound.state.music));
     musicBtn.setAttribute('aria-label', sound.state.music ? labels.musicOn : labels.musicOff);
   };
